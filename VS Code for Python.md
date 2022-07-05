@@ -1,23 +1,23 @@
-Key ideas in this page: 
-- .code-workspace -- A .json file that defines the workspace
-- .vscode -- This file is used when 
-- settings.json -- A user-wide one for all settings (eg dark-mode)
-- settings in single folder -- A local one, prioritised for the workspace (Settings stored in the .vscode file )
-- settings in multi-workspace -- workspace settings, stored in the .code-workspace file.
-- PYTHONPATH -- [[Environment Variables]], that tell python where to look for libraries
-- The interpreter path -- where VSCode looks for the python interpreter
-- .env files -- Need to be located by the settings.json file for the project, or the python plugin will automatically look in the worspace folder.  Currently not working as documented
-- Workspace folder -- where the .vscode file is located.  Or multiple folders listed in .code-workspace.
-
-### Bug in VSCode
-VScode is currently not picking up environment variables correctly as explained in the documentation.  It is not enough just to leave the .env file in the workspace folder, as claimed in the documentation.  
-
-I will probably switch to PyCharm at this point, this is an almighty pain in the arse, and I've spent a lot of time trying to understand what was going on.  It explains why QGIS won't run properly from VSCODE.  There are workarounds, but they don't seem worth messing about with.  It's amazing VSCode has such a massive flaw and done little to fix it for so long. 
+### Warning
+I will probably switch to PyCharm at this point, this is an almighty pain in the arse, and I've spent weeks trying to understand what was going on.  It explains why QGIS won't run properly from VSCODE.  There are workarounds, but they don't seem worth messing about with.  It's amazing VSCode has such a massive flaw.  People have been struggling with this off and on since 2015.
 
 [Here is the issue tracking on GitHub](https://github.com/microsoft/vscode-python/issues/944)
 [And here](https://github.com/microsoft/pylance-release/issues/275)
 
-This is a shambles.  Different issues and paths used for Pylance + Code completion, Terminal, Debugger.  Microsoft clearly doesn't prioritise Python for VSCode.  
+This is a shambles.  Different issues and paths used for Pylance + Code completion, Terminal, Debugger.  Microsoft clearly doesn't take Python all that seriously for VSCode.  
+
+#### Key ideas in this page: 
+- .code-workspace -- A .json file that defines settings and folders for a multi-root folder workspace
+- .vscode -- As above, but single folder.  
+- settings.json -- A user-wide one for all settings (eg dark-mode)
+- settings.json -- Settings, prioritised for the workspace (Settings stored in the .vscode or .code-workspace  file )
+- PYTHONPATH -- [[Environment Variables]], that tell python where to look for libraries
+- The interpreter path -- where VSCode looks for the python interpreter
+- .env files -- Need to be located by the settings.json file for the project, or the python plugin will automatically look in the worspace folder.  Currently not working as documented.
+- Workspace folder -- where the .vscode file is located.  Or multiple folders listed in .code-workspace.
+
+### Bugs in VSCode
+VScode is currently not picking up environment variables the way it claims in the documentation.  It is not enough just to leave the .env file in the workspace folder.  Either single .vscode workspaces or with the .code-workspace
 
 ### Settings###
 There are two types of settings.  User wide settings, and Workspace settings.  Both stored in a settings.json file, with the workplace settings overriding most of the user settings.
@@ -90,6 +90,8 @@ Things I could setup this way would be for example different extensions enabled 
 
 I could use .env files for things like Kaggle, W&B or Co-lab API keys, and of course for the PYTHONPATH, to access project-specific libraries already on my computer like QGIS.
 
+The only reliable way I can see to do this is to 
+
 By default, the Python extension looks for and loads a file named `.env` in the current workspace folder, then applies those definitions. The file is identified by the default entry `"python.envFile": "${workspaceFolder}/.env"` in your user settings (see [General Python settings](https://code.visualstudio.com/docs/python/settings-reference#_general-python-settings)). You can change the `python.envFile` setting at any time to use a different definitions file.
 
 I think it is better to put the .env file in the workplace folder and consider it part of the project.  This is more transparent.  If switching from Ubuntu to Windows, it may be necessary to have a different .env file (for example to cope with different PYTHONPATH variables) but at least the requirements are then transparent.
@@ -117,7 +119,7 @@ So to add your external libraries to the path, create a file named _.env_ in you
 PYTHONPATH="C:\path\to\a;C:\path\to\b"
 ```
 
-This is good, it only requires the .env file to be moved around with the source code.  No changes should be needed for the settings.
+This would be good if it actually worked, it only requires the .env file to be moved around with the source code.  No changes should be needed for the settings.  Currently not working.
 
 _____________________________________________________________
 
@@ -128,7 +130,18 @@ Currently this needs to be set manually in extrapaths, add this to the settings 
 "python.analysis.extraPaths": ["/home/some_sub_folder:another_one:etc"]
 ```
 
-#### Set PYTHONPATH for terminal commands
+#### PYTHONPATH for Terminal Commands
+This does not seem to work for me
+```JSON
+"terminal.integrated.env.linux": {
+"PYTHONPATH": "${workspaceFolder}/.env"
+}
+```
+
+#### PYTHONPATH for Debugging
+This needs to go in the launch.json  file.
+
+#### Set Interpreter path for terminal commands
 So the terminal command window does not know the interpreter path unless it is set in the terminal settings, simply running the script where the editor knows the path but not the terminal may use the wrong interpereter. But specifying it in the command solves this issue.  For example in Ubuntu:
 
 ```bash
