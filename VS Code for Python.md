@@ -1,17 +1,23 @@
 Key ideas in this page: 
 - .code-workspace -- A .json file that defines the workspace
-- .vscode -- Note sure, figure this out.
+- .vscode -- This file is used when 
 - settings.json -- A user-wide one for all settings (eg dark-mode)
-- settings.json -- A local one, prioritised for the workspace (tracked by the code-workspace file)
+- settings in single folder -- A local one, prioritised for the workspace (Settings stored in the .vscode file )
+- settings in multi-workspace -- workspace settings, stored in the .code-workspace file.
 - PYTHONPATH -- [[Environment Variables]], that tell python where to look for libraries
 - The interpreter path -- where VSCode looks for the python interpreter
-- .env files -- Need to be located by the settings.json file for the project, or the python plugin will automatically look in the worspace folder
-- Workspace folder -- Figure out how to locate this!
+- .env files -- Need to be located by the settings.json file for the project, or the python plugin will automatically look in the worspace folder.  Currently not working as documented
+- Workspace folder -- where the .vscode file is located.  Or multiple folders listed in .code-workspace.
 
 ### Bug in VSCode
-VScode is currently not picking up environment variables correctly as explained in the documentation.  It is not enough just to leave the .env file in the workspace folder, as claimed in the documentation.
+VScode is currently not picking up environment variables correctly as explained in the documentation.  It is not enough just to leave the .env file in the workspace folder, as claimed in the documentation.  
+
+I will probably switch to PyCharm at this point, this is an almighty pain in the arse, and I've spent a lot of time trying to understand what was going on.  It explains why QGIS won't run properly from VSCODE.  There are workarounds, but they don't seem worth messing about with.  It's amazing VSCode has such a massive flaw and done little to fix it for so long. 
 
 [Here is the issue tracking on GitHub](https://github.com/microsoft/vscode-python/issues/944)
+[And here](https://github.com/microsoft/pylance-release/issues/275)
+
+This is a shambles.  Different issues and paths used for Pylance + Code completion, Terminal, Debugger.  Microsoft clearly doesn't prioritise Python for VSCode.  
 
 ### Settings###
 There are two types of settings.  User wide settings, and Workspace settings.  Both stored in a settings.json file, with the workplace settings overriding most of the user settings.
@@ -47,6 +53,7 @@ By default it is:
 	"settings": {}
 }
 ```
+
 ### Customizing VSCode with User and Workspace Settings
 [From here](https://github.com/d-w-d/python-project-template)
 
@@ -95,8 +102,6 @@ The [PYTHONPATH](https://docs.python.org/3/using/cmdline.html#envvar-PYTHONPATH
 I think it would be better practice to use a .env file, as this could be moved to a different machine, and modified, and also it can be easily checked and edited.
 
 The only thing to note that if it is set with a .env file, then it will not effect tools run through the terminal.
-
-
 _____________________________________
 Found this on stack-exchange, seems to be the solution: 
 
@@ -116,11 +121,12 @@ This is good, it only requires the .env file to be moved around with the source 
 
 _____________________________________________________________
 
-#### Set PYTHONPATH for Linting
-Apparently this is different
+#### Set PYTHONPATH for Linting & Code completion
+Currently this needs to be set manually in extrapaths, add this to the settings in the .vscode or .code-workspace JSON file
 
-#### Set PYTHONPATH for code completion
-Make sure I understand and note this
+```JSON
+"python.analysis.extraPaths": ["/home/some_sub_folder:another_one:etc"]
+```
 
 #### Set PYTHONPATH for terminal commands
 So the terminal command window does not know the interpreter path unless it is set in the terminal settings, simply running the script where the editor knows the path but not the terminal may use the wrong interpereter. But specifying it in the command solves this issue.  For example in Ubuntu:
