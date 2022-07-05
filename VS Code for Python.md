@@ -1,12 +1,6 @@
-### Warning
-I will probably switch to PyCharm at this point, this is an almighty pain in the arse, and I've spent weeks trying to understand what was going on.  It explains why QGIS won't run properly from VSCODE.  There are workarounds, but they don't seem worth messing about with.  It's amazing VSCode has such a massive flaw.  People have been struggling with this off and on since 2015.
-
-[Here is the issue tracking on GitHub](https://github.com/microsoft/vscode-python/issues/944)
-[And here](https://github.com/microsoft/pylance-release/issues/275)
-
-This is a shambles.  Different issues and paths used for Pylance + Code completion, Terminal, Debugger.  Microsoft clearly doesn't take Python all that seriously for VSCode.  
 
 #### Key ideas in this page: 
+- .VSCode is probably not worth the effort if you need to use environment variables, or project specific python paths from out side the root folder.
 - .code-workspace -- A .json file that defines settings and folders for a multi-root folder workspace
 - .vscode -- As above, but single folder.  
 - settings.json -- A user-wide one for all settings (eg dark-mode)
@@ -18,6 +12,13 @@ This is a shambles.  Different issues and paths used for Pylance + Code completi
 
 ### Bugs in VSCode
 VScode is currently not picking up environment variables the way it claims in the documentation.  It is not enough just to leave the .env file in the workspace folder.  Either single .vscode workspaces or with the .code-workspace
+
+I will probably switch to PyCharm at this point, this is an almighty pain in the arse, and I've spent weeks trying to understand what was going on.  It explains why QGIS won't run properly from VSCODE.  There are workarounds, but they don't seem worth messing about with.  It's amazing VSCode has such a massive flaw.  People have been struggling with this off and on since 2015.
+
+[Here is the issue tracking on GitHub](https://github.com/microsoft/vscode-python/issues/944)
+[And here](https://github.com/microsoft/pylance-release/issues/275)
+
+This is a shambles.  Different issues and paths used for Pylance + Code completion, Terminal, Debugger.  Microsoft clearly doesn't take Python all that seriously for VSCode.  
 
 ### Settings###
 There are two types of settings.  User wide settings, and Workspace settings.  Both stored in a settings.json file, with the workplace settings overriding most of the user settings.
