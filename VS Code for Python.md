@@ -11,15 +11,37 @@
 - Workspace folder -- where the .vscode file is located.  Or multiple folders listed in .code-workspace.
 
 ### Bugs in VSCode
-VScode is currently not picking up environment variables the way it claims in the documentation.  It is not enough just to leave the .env file in the workspace folder.  Either single .vscode workspaces or with the .code-workspace
+VScode is currently not picking up environment variables from .env files the way it claims in the documentation.  It is not enough just to leave the .env file in the workspace folder.  Either single .vscode workspaces or with the .code-workspace
 
-I will probably switch to PyCharm at this point, this is an almighty pain in the arse, and I've spent weeks trying to understand what was going on.  It explains why QGIS won't run properly from VSCODE.  There are workarounds, but they don't seem worth messing about with.  It's amazing VSCode has such a massive flaw.  People have been struggling with this off and on since 2015.
+This is an almighty pain in the arse, and I've spent weeks trying to understand what was going on.  It explains why QGIS won't run properly from VSCODE.  It's amazing VSCode has such a massive flaw.  People have been struggling with this off and on since 2015.
 
 [Here is the issue tracking on GitHub](https://github.com/microsoft/vscode-python/issues/944)
 [And here](https://github.com/microsoft/pylance-release/issues/275)
 
 This is a shambles.  Different issues and paths used for Pylance + Code completion, Terminal, Debugger.  Microsoft clearly doesn't take Python all that seriously for VSCode.  
 
+##### Workaround ideas
+
+I haven't finished thinking this through.  How many places could I specify a pythonpath?  Launch? Terminal settings, settings, export from the terminal, from the python code, from extrapaths in settings.   
+
+- Switch to PyCharm, or Spyder [Here are the isntructions for PyCharm](https://docs.qgis.org/3.22/en/docs/pyqgis_developer_cookbook/plugins/ide_debugging.html)
+- Leave the .env file as desired (for other editors, reproducibility), but manually add the required paths to extrapaths, terminal settings, & the debugger.  Seems reasonable if not a lot of paths.  
+- PIP or conda install dotenv in the environment for VSCode, run the code below, handle the error when running from another environment where the imports aren't needed (like QGIS for example)  
+```python
+	try:
+		from dotenv import load_dotenv
+		load_dotenv()
+	except ImportError:
+		pass
+```
+Then add the paths to the settings with extrapaths, for linting and code completion.	
+```JSON
+"python.analysis.extraPaths": ["extra_paths_here:another_path"],
+```
+- Export the pythonpath of interest from the terminal for the session.  Or add this to the launch.json (Won't help for debugging that's all). Add it to extrapaths for linting and code completion.
+```BASH
+export PYTHONPATH="$PYTHONPATH:/usr/share/qgis/python/plugins:/usr/share/qgis/python"
+```
 ### Settings###
 There are two types of settings.  User wide settings, and Workspace settings.  Both stored in a settings.json file, with the workplace settings overriding most of the user settings.
 
@@ -66,7 +88,6 @@ To get to an interface to adjust either of these sets of settings, go to
 When you create any non-default `Workspace Settings` in the UI, VSCode will generate a corresponding `.vscode` folder in your project root directory and will place a `settings.json` file in it. This is was determines the way VSCode and its extensions behave for files _in this folder_. You can see one in this repository, with settings specific to python development. These workspace settings take precedence over your `User Settings`. (Likewise, when you set global `User Settings`, a JSON file is updated somewhere on your system; on a Mac, this file is located at `~/Library/Application\ Support/Code/User/settings.json`).
 
 VSCode comes with myriad possible settings to place in these json files. For example, if you want to increase the size of the displayed text, you can add the following key-value pair to your user or workspace json file:
-
 ```
 {
   //...
@@ -74,7 +95,6 @@ VSCode comes with myriad possible settings to place in these json files. For exa
   //...
 }
 ```
-
 If you do NOT place such a key-value pair in one of your json files, then VSCode will apply a default value. In the example above, you can see the description of the setting and its default value by searching for `window.zoomLevel` in the settings UI.
 
 Things I could setup this way would be for example different extensions enabled for different types of programming, Ipython window, default choice of virtual python environment?
