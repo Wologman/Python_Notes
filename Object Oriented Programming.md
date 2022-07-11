@@ -134,16 +134,17 @@ print(pt.distance_to_origin())
 
 >>> (-3.0, 0)
 >>> 5.0
->>> ```
+```
 
 ## Class vs Instance level data
-A class level attribute can be stored in the class definition, and will apply to all instances.
+A class level data attribute can be stored in the class definition, and will apply to all instances.
+
 ```Python
 class MyClass:
 	CLASS_ATTRIBUTE_NAME = some_value
 ```
-An instance level attribute needs defining using `self.attribute = some_value`, where the value must be passed in as an attrubute, or use a default value from the `__init__()` constructor
 
+An instance level attribute needs defining using `self.attribute = some_value`, where the value must be passed in as an attrubute, or use a default value from the `__init__()` constructor
 
 
 
