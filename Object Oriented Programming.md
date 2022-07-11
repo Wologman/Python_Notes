@@ -1,4 +1,7 @@
-### The basic concept
+Discussed here are the three core concepts of OOP.  
+#Encapsulation, Polymorhism, Inheritance
+
+# Encapsulation
 An object represents something with State + Behaviour
 Cobining these two is *encapsulation*
 
@@ -15,20 +18,20 @@ In Python, *states* are called *attributes* represented by *variables* , *behavi
 List all attributes and methods of an object (a) by calling  `dir(a)`
 To get help on class information for an object a:  `help(a)`
 
-#### Create a basic class
+## Create basic classes
 
-##### Empty class
+### Empty class
 ```python
 class Customer:
 	#put some code here
 	pass
 ```
 
-##### Add a method to a class
+### Add a method to a class
 ```python
 class Customer:
 
-	def identify(self, name)
+	def identify(self, name);
 		print('I am Customer ' + name)
 ```
 
@@ -43,12 +46,12 @@ cust.identify('Laura') # Apply the identify method to the instance
 ```
 So here `cust` has become an instance of the class `Customer`, and this instance is passed to the function `identify`  by the `self` parameter of the function.  As in othis is the equivalent of the function `identify(cust,Laura)` except that when the class definition was written, we don't want to use a specific object that doesn't even exist yet, or may be used any number of times in different instances.
 
-##### Add an attrubute to a class
+### Add an attrubute to a class
 Set an attribute of an object by using an asignment.  So to extend the previous example by creating a name attribute to the customer class:
 ```python
 class Customer:
 
-	def set_name(self, new_name)
+	def set_name(self, new_name):
 		self.name = new_name # Asignment of new_name parameter to .name attribute
 ```
 So at this point we can call the .name parameter with:
@@ -64,10 +67,10 @@ Further we can a method and a parameter assignment, with the self parameter, to 
 ```python
 class Customer:
 
-	def set_name(self, new_name)
+	def set_name(self, new_name):
 		self.name = new_name # Asignment of new_name parameter to .name attribute
 
-	def identify(self, name)
+	def identify(self, name):
 		print('I am customer ' + self.name)
 
 cust = Customer() # Create an instance of the Customer class
@@ -77,4 +80,73 @@ print(cust.identify()) #The () are because we are applying a method
 >>> I am customer Laura
 ```
 
-##### The `__init__` constructor
+## The `__init__()` constructor
+
+Instead of instantiating an object with `object-name = class-name()` and then adding the attributes one by one using `set_`  methods, like above, it is better practice to use the `__init__` constructor.  With this approach, the object is instantiated, and attribute values passed in as parameters.   
+
+Another advantage is that all the attributes can be declared at the top of the class definition (best practice), making them easy to find (if the class is a very long complex one), and they can be set to default values as parameter values, also helpful.
+
+For example: 
+```python
+class Customer:
+'''Write a docstring here for anyone who wants to use help(Customer) '''
+
+	def__init__(self, name, balance=0)
+		self.name = name # Asignment of new_name parameter to .name attribute
+		self.balance = balance
+		print('New customer', self.name, 'has a balance of', self.balance)
+
+
+cust = Customer('Luis', 1000) # Create an instance of the Customer class
+
+>>> New customer Luis has a balance of 1000
+```
+
+A slightly bigger example below.  Note that the `__init__` is treated like any other function, no need to indent/nest the methods that come next.
+
+```Python
+import numpy as np
+
+class Point:
+'''A class for menipulating a point on the XY plane'''
+
+	def __init__(self, x=0, y=0):
+		self.x = x
+		self.y = y
+
+	def reflect(self, axis):
+		if axis == 'x':
+			self.y = -1 * self.y
+		if axis == 'y':
+			self.x = -1 * self.x
+		else:
+			print('Invalid value for axis')
+
+	def distance_to_origin(self):
+		return np.sqrt(self.x **2 + self.y **2)
+
+  
+pt = Point(x=3.0)
+pt.reflect("y")
+print((pt.x, pt.y))
+pt.y = 4.0
+print(pt.distance_to_origin())
+
+>>> (-3.0, 0)
+>>> 5.0
+>>> ```
+
+## Class vs Instance level data
+A class level attribute can be stored in the class definition, and will apply to all instances.
+```Python
+class MyClass:
+	CLASS_ATTRIBUTE_NAME = some_value
+```
+An instance level attribute needs defining using `self.attribute = some_value`, where the value must be passed in as an attrubute, or use a default value from the `__init__()` constructor
+
+
+
+
+# Ineritance
+
+# Encapsulation

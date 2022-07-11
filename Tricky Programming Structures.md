@@ -1,12 +1,14 @@
 ### Lamda Functions
 
 ### Decorators
+[Start with this](https://www.geeksforgeeks.org/decorators-in-python/)
 
 ### List Comprehensions
 
 ### Good practice for relative/absolute paths to modules
 
 ### Pythonic ways to do set variables with conditional statements
+Just a bit more compact than the obvious multi-line ways.
 
 #### One-line if-else
 ```Python
