@@ -146,6 +146,38 @@ class MyClass:
 
 An instance level attribute needs defining using `self.attribute = some_value` where the value must be passed in as a parameter, or use a default value from the `__init__()` constructor.
 
+## Class level methods
+Regular methods are already shared between every instance.
+It is also possible to bind a method to a class, without any instance data.  So something in this form:
+
+```Python
+class MyClass:
+	@classmethod       # Use a decorator to declare it as a class method
+	def my_awsome_method(cls,args...)
+		# Do some stuff
+		# Do not use any instance attributes
+
+MyClass.my_awesome_method(args)
+```
+
+Note that the method is called from `Class.method()` rather than `object.method()`  The main use case for doing this would to be to create an alternative constructor.  For example transform the data some way before the `__init__()` is called.  Here is an example where the data can be added from a file instead of as parameters:
+
+```python
+class Employee:
+	def __init__(self, name, salary=30000):
+		self.name = name
+		self.salary = salary
+
+ 
+	@classmethod   #The decorator is needed, but I don't know why - find out later   
+	def from_file(cls, filename):  # Note how now we're using cls instead of self
+		with open(filename, 'r') as f:
+			name = f.readline()
+		return cls(name)
+```
+
+When the above is called by `emp = Employee.from_file("some_file.txt")`  what happens is the class method is envoked, then passes the resulting name to the class using the `__init__` constructor.   So now the object `emp` has been instantiated with a name from a file, instead of needing the argument name.
+
 
 
 
