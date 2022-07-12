@@ -1,5 +1,5 @@
-Discussed here are the three core concepts of OOP.  
-#Encapsulation, Polymorhism, Inheritance
+Discussed here are the three core concepts of OOP with python syntax and terminology:
+[[#Encapsulation]], [[#Inheritance]] & [[#Polymorphism]]
 
 # Encapsulation
 An object represents something with State + Behaviour
@@ -144,10 +144,14 @@ class MyClass:
 	CLASS_ATTRIBUTE_NAME = some_value
 ```
 
-An instance level attribute needs defining using `self.attribute = some_value`, where the value must be passed in as an attrubute, or use a default value from the `__init__()` constructor
+An instance level attribute needs defining using `self.attribute = some_value` where the value must be passed in as a parameter, or use a default value from the `__init__()` constructor.
 
 
 
-# Ineritance
 
-# Encapsulation
+
+
+
+# Inheritance
+
+# Polymorphism
