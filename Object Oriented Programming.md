@@ -146,6 +146,9 @@ class MyClass:
 
 An instance level attribute needs defining using `self.attribute = some_value` where the value must be passed in as a parameter, or use a default value from the `__init__()` constructor.
 
+The class level attribute can be changed by re-asignment with `ClassName.CLASS_ATTRIBUTE_NAME = some_new_value`
+
+
 ## Class level methods
 Regular methods are already shared between every instance.
 It is also possible to bind a method to a class, without any instance data.  So something in this form:
@@ -179,11 +182,84 @@ class Employee:
 When the above is called by `emp = Employee.from_file("some_file.txt")`  what happens is the class method is envoked, then passes the resulting name to the class using the `__init__` constructor.   So now the object `emp` has been instantiated with a name from a file, instead of needing the argument name.
 
 
-
-
-
-
-
 # Inheritance
+Class Inheritance is what makes OOP efficient for code-reuse.  A new class inherets the original class functionality, but more can be easily added.  By allowing the same template to be used multiple times across a larger code-base.  Or for an existing class in another module to be used as a starting point for a more customised class.
+
+## Basic Concept
+Just add prenthesis around the original class when declaring the new one.
+
+```Python
+class MyChildClass(MyParentClass):
+	#Do more stuff here, but inheret the original details from parent
+```
+`Mychild` class is considered an instance of `MyParentClass`, but it can have more features that can be shared amongst other instances of `MyChildClass`.
+
+Here is a simple example
+
+```Python
+class Employee:
+
+	MIN_SALARY = 30000
+	def __init__(self, name, salary=MIN_SALARY):
+		self.name = name
+		if salary >= Employee.MIN_SALARY:
+			self.salary = salary
+		else:
+			self.salary = Employee.MIN_SALARY
+
+	def give_raise(self, amount):
+		self.salary += amount
+
+class Manager(Employee):
+	def display(self):
+		print('Manager', self.name)
+
+  
+mng = Manager("Debbie Lashko", 86500)
+print(mng.name)
+
+>>> mng.display()
+```
+
+Or another  example we can initialise the child class with an extra parameter, by calling the `__init__()` consructor from the parent.  In the example below, we add an attribute 'interes_rate' to a child of a parent class that didn't have one.
+```Python
+class SavingsAccount(BankAccount):
+
+	#Constructor specifically for savings account
+	def __init__(self, balance, interest_rate):
+		BankAccount.__init__(self, balance) #Call the parent __init__() constructor
+		self.interest_rate = interest rate  #The extra functionality
+```
+Instantiate a SavingsAccount object: `acct = SavingsAccount(1000, 0.03)`
+
+## Customising functionality with inheritance
+The above examples took a parent class and added new functionality.  It is also possible to use the parent class and modify it's original methods, so that the interface remains the same, but the behaviour is modified for the child instances (without having to re-write the whole original methods)
+
+Suppose in the above example we want to add a withdrawl fee to the existing funtionality withdrawl, for the subclass CheckingAccount.
+
+```Python
+class CheckingAccount(BankAccount):
+	def __init__(self, balance):
+		BankAccount.__init__(self, content)
+		self.limit = limit
+	def deposit(self, amount):
+		self.balance += amount
+	def withdrawl(self, amount, fee=0)
+		BankAccount.withdraw(self, amount - fee)
+```
+With the above, the argument syntax is the same  to perform the withdrawl method, but the behaviour will include a fee, if we the object is an instance of the checking account sub-class.  For example:
+
+```Python
+check_acct = CheckingAccount(1000, 25)
+bank_acct = BankAccount(1000)
+
+check_acct.withdraw(200)
+bank_acct.withdraw(200)
+Print(check_acct.amount, bank_account.amount )
+
+>>> 795 800
+```
+
 
 # Polymorphism
+Not up to this yet
