@@ -221,7 +221,7 @@ print(mng.name)
 >>> mng.display()
 ```
 
-Or another  example we can initialise the child class with an extra parameter, by calling the `__init__()` consructor from the parent.  In the example below, we add an attribute 'interes_rate' to a child of a parent class that didn't have one.
+Or another  example we can initialise the child class with an extra parameter, by calling the `__init__()` consructor from the parent.  In the example below, we add an attribute `interest_rate` to a child of a parent class that didn't have one.
 ```Python
 class SavingsAccount(BankAccount):
 
@@ -247,7 +247,7 @@ class CheckingAccount(BankAccount):
 	def withdrawl(self, amount, fee=0)
 		BankAccount.withdraw(self, amount - fee)
 ```
-With the above, the argument syntax is the same  to perform the withdrawl method, but the behaviour will include a fee, if we the object is an instance of the checking account sub-class.  For example:
+With the above, the argument syntax is the same  to perform the withdrawl method, but the behaviour will include a fee, if the object is an instance of the checking account sub-class.  For example:
 
 ```Python
 check_acct = CheckingAccount(1000, 25)
@@ -259,6 +259,16 @@ Print(check_acct.amount, bank_account.amount )
 
 >>> 795 800
 ```
+
+Here is an example modifying the Pandas DataFrame class to allow the use of timestamps:
+
+```Python
+#put some code here
+```
+
+
+
+
 
 
 # Polymorphism
