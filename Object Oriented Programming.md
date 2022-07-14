@@ -1,5 +1,5 @@
 Discussed here are the three core concepts of OOP with python syntax and terminology:
-[[#Encapsulation]], [[#Inheritance]] & [[#Polymorphism]]
+[[#Encapsulation]], [[#Inheritance]] & [[#Polymorphism]]  Mostly based on examples from The Datacamp course *Object oriented programming in python*
 
 # Encapsulation
 An object represents something with State + Behaviour
@@ -263,12 +263,22 @@ Print(check_acct.amount, bank_account.amount )
 Here is an example modifying the Pandas DataFrame class to allow the use of timestamps:
 
 ```Python
-#put some code here
+import pandas as pd
+
+class LoggedDF(pd.DataFrame):
+
+	def __init__(self, *args, **kwargs):
+		pd.DataFrame.__init__(self, *args, **kwargs)
+		self.created_at = datetime.today()
+	
+	def to_csv(self, *args, **kwargs):
+		temp = self.copy()
+		temp["created_at"] = self.created_at
+
+	pd.DataFrame.to_csv(temp, *args, **kwargs)
 ```
 
-
-
-
+Notice how in the very last line, the parent method was called and passed an object to it that isn't `self`. When you call parent methods in the class, they should accept _some_ object as the first argument, and that object is _usually_ `self`, but it doesn't have to be.
 
 
 # Polymorphism
