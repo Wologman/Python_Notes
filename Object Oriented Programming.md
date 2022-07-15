@@ -1,5 +1,5 @@
 Discussed here are the three core concepts of OOP with python syntax and terminology:
-[[#Encapsulation]], [[#Inheritance]] & [[#Polymorphism]]  Mostly based on examples from The Datacamp course *Object oriented programming in python*
+[[#Encapsulation]], [[#Inheritance]] & [[#Polymorphism]]  Mostly based on examples from The Datacamp course *Object Oriented Programming in Python*
 
 # Encapsulation
 An object represents something with State + Behaviour
@@ -148,7 +148,6 @@ An instance level attribute needs defining using `self.attribute = some_value` w
 
 The class level attribute can be changed by re-asignment with `ClassName.CLASS_ATTRIBUTE_NAME = some_new_value`
 
-
 ## Class level methods
 Regular methods are already shared between every instance.
 It is also possible to bind a method to a class, without any instance data.  So something in this form:
@@ -183,14 +182,14 @@ When the above is called by `emp = Employee.from_file("some_file.txt")`  what ha
 
 
 # Inheritance
-Class Inheritance is what makes OOP efficient for code-reuse.  A new class inherets the original class functionality, but more can be easily added.  By allowing the same template to be used multiple times across a larger code-base.  Or for an existing class in another module to be used as a starting point for a more customised class.
+Class Inheritance is what makes OOP efficient for code-reuse.  A new class inherits the original class functionality, but more can be easily added.  By allowing the same template to be used multiple times across a larger code-base.  Or for an existing class in another module to be used as a starting point for a more customised class.
 
 ## Basic Concept
 Just add prenthesis around the original class when declaring the new one.
 
 ```Python
 class MyChildClass(MyParentClass):
-	#Do more stuff here, but inheret the original details from parent
+	#Do more stuff here, but inherit the original details from parent
 ```
 `Mychild` class is considered an instance of `MyParentClass`, but it can have more features that can be shared amongst other instances of `MyChildClass`.
 
@@ -247,7 +246,7 @@ class CheckingAccount(BankAccount):
 	def withdrawl(self, amount, fee=0)
 		BankAccount.withdraw(self, amount - fee)
 ```
-With the above, the argument syntax is the same  to perform the withdrawl method, but the behaviour will include a fee, if the object is an instance of the checking account sub-class.  For example:
+With the above, the argument syntax is the same to perform the withdrawl method, but the behaviour will include a fee, if the object is an instance of the checking account sub-class.  For example:
 
 ```Python
 check_acct = CheckingAccount(1000, 25)
@@ -280,6 +279,185 @@ class LoggedDF(pd.DataFrame):
 
 Notice how in the very last line, the parent method was called and passed an object to it that isn't `self`. When you call parent methods in the class, they should accept _some_ object as the first argument, and that object is _usually_ `self`, but it doesn't have to be.
 
+Also remember `*args` and `**kwargs`  are ways to set up the function for an unknown number of arguments, or keyword arguments.  For this example it makes sense, because there are lots of possible arguments that can be used for a Pandas DF, no point trying to include them all here.
+
+## Customising python comparison operators
+By default, two objects withe the same values for thier attributes are not equal, since they are still seperate objects, stored in different memory locations, with a different memory reference id.  However this behaviour can be changed by defining a different equality operator within the class definition.  Many classes use this, for example Pandas DFs, are considered `==` if the values in them are identical.  
+
+For example below we redefine `==` to be true if the attributes `id` and `name` are equal:
+
+```Python
+class Customer:
+	def __init(self, id, name)
+
+	def __eq__(self, other) # A special constructor, called when == is used
+		return (self.id == other.id) and (self.name ==other.name)
+```
+
+Using () around an expression returns a boolean.  It is possible to modify the other comparison operators also.  `!=, >=, <=, >, <`    If a child and a parent class both have a customised operator, the child one takes precidence, like other mothods and attribute values.
+
+It is also good practice to check that two objects are the same type when making comparisons.  Such as in the example below:
+
+```Python
+class BankAccount:
+
+	def __init__(self, number, balance=0):
+		self.number, self.balance = number, balance
+
+	def withdraw(self, amount):
+		self.balance -= amount
+
+	def __eq__(self, other):
+		return (self.number == other.number) and \
+		(type(self) == type(other))
+
+acct = BankAccount(873555333)
+pn = Phone(873555333)
+print(acct == pn)
+
+>>> False
+```
+
+## Customising string and repr information for the object
+
+`__str__()` method is used when we call  `print(object)`, has basic information for the end user.  If nothing is defined, then just a memory address.  Otherwise for an array for example:
+```Python
+import numpy as np
+print(np.array([1,2,3]))
+
+>>> [1 2 3]
+```
+
+`__repr__()` method is used when we call `repr(obj)`, and should contain all the structure needed to reproduce the object.  For example
+```Python
+import numpy as np
+repr(np.array([1,2,3]))
+
+>>> array([1, 2, 3])
+```
+
+Here is an example where both `__str__` and `__repr__` are defined:
+
+```python
+class Employee:
+	def __init__(self, name, salary=30000):
+	self.name, self.salary = name, salary
+
+	def __str__(self):
+		s = "Employee name: {name}\nEmployee salary
+			{salary}".format(name=self.name, salary=self.salary)
+		return s
+
+	def __repr__(self):
+		r = "Employee(\"{}\", {})".format(self.name, self.salary)
+		return r
+
+emp1 = Employee("Amar Howard", 30000)
+
+print(emp)
+print(repr(emp))
+
+>>> Amar Howard    #Note there is a newline character in the string
+>>> 30000
+>>> Employee("Amar Howard", 30000)
+```
+
+## Exception Handling
+It is good practice to handle exceptions with exception errors, `try`, `except` (can be more than one) and `finally` (for the last resort if none of the excepts work, for example close open files) and make the messages and behaviours as granular as possible.  
+
+Except is a class  its self in python python has built-in exception subclasses.  For example:
+```Python
+def invert_at_index(x, ind):
+	try:
+		return 1/x[ind]
+	except ZeroDivisionError:
+		print("Cannot divide by zero!")
+	except IndexError:
+		print("index out of range!")
+
+a = [5,6,0,7]
+print(invert_at_index(a, 1)) # Works okay
+print(invert_at_index(a, 2)) # Potential ZeroDivisionError
+print(invert_at_index(a, 5)) # Potential IndexError
+
+>>> 0.16666666666666666 
+>>> Cannot divide by zero! 
+>>> None 
+>>> index out of range! 
+>>> None
+```
+
+If it is necessary to raise an exception yourself (even though the code may run without built-in errors).  In this case use `raise`.  For example:
+```Python
+def make_list_of_ones(length)
+	if length <= =:
+		raise ValueError("Invalid length!") #Stops the program and raises error
+	return [1]*length
+```
+If no suitable exception exists a custom exception can be made by inherting and adding to an existing exception class.  For example for the earlier banking Customer class, if we want an exception for a negative balance:
+
+```python
+class BalanceError(Exception): pass # Created an empty sub-class of Exception
+
+class Customer:
+	def __init__(self, name, balance):
+	if balance < 0:
+		raise BalanceError("Balance has to be non-negative!")
+	else:
+		self.name, self.balance = name, balance
+```
+Here is a less trivial example with two exceptions:
+
+```Python
+class SalaryError(ValueError): pass
+class BonusError(SalaryError): pass
+
+class Employee:
+	MIN_SALARY = 30000
+	MAX_BONUS = 5000
+
+	def __init__(self, name, salary = 30000):
+		self.name = name
+
+		if salary < Employee.MIN_SALARY:
+			raise SalaryError("Salary is too low!")
+		self.salary = salary
+
+def give_bonus(self, amount):
+	if amount > Employee.MAX_BONUS:
+		raise BonusError("The bonus amount is too high!")
+
+	if self.salary + amount < Employee.MIN_SALARY:
+		raise SalaryError("The salary after bonus is too low!")
+
+	self.salary +=amount
+```
+
+Best to list except blocks in order of specifity, from child -> parent so the most informative error is caught before the more general one.
+
 
 # Polymorphism
-Not up to this yet
+Polymorphishm is the use of a unified interface to unified interface to operate on objects of different classes.  In this way a higher order function that uses a collection of objects, not necessarily from the same sub-classes can operate consistantly on them without needing to know their sub-type.
+
+For example, the *withdraw* method in earlier banking examples should operate in the same way on each account (all that changes is the output, for example some accounts may have a withdrawl fee, others don't, either way they should be designed to operate with the same number of arguments)
+
+### LSP
+Inheretance should only be used if it satisfies the Liskov substitution principle:
+
+*Base class hould be interchangeable with any of its subclasses without altering any properties of the program*
+
+This means it should behave the same both **Syntactically** (Function arguments and returned values are compatible), and **Semantically** (The state of the object and program are consistent)
+- No strenthed input conditions
+- Subclass methods don't weaken output conditions
+- No additional exceptions
+
+Violations of the LSP would include
+- Parent method requires 1 parameter, child requries 2.  (This could be fixed by adding a default parameter to the parent)
+- Subclass strenthens input conditions, for example parameters fall in a narrower range
+- The subclass can output a narrower range of outputs than allowed by the parent class.  So if this happened the parent class would throw an exception.
+- Subclass changes additional attributes, not changed by the parent
+- Subclass includes additional exceptions.  (If more exceptions are needed, they should go into the parent class)
+
+**The golden rule for ineritance**: No LSP - No Inheritance
+
+Sticking to this avoids creating likely undetected problems further down the track.
