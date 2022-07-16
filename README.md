@@ -1,4 +1,4 @@
 # Python_Notes
-Markdown files from my Obsidian Vault.  My interests include a lot more than just programming, and even the programming is typically in multiple platforms/operating systems/languages/purposes/styles/frameworks, so it gets confusing. I started programming in 1994, in PASCAL. 
+Markdown files from my Obsidian Vault, not perfect on GitHub.  My interests include a lot more than just python programming, and even the programming is typically in multiple platforms/OS/languages/purposes/styles & frameworks, so I forget things sometimes.
 
-I've reinvented then forgotten these wheels so many times I want to write them up more thoroughly, follow consistant practices instead of searching SO posts and official docs so often.
+I've written some of this up in my own words so I can follow more consistant practices & spend less time trying to follow SO posts and official docs.
