@@ -458,6 +458,38 @@ Violations of the LSP would include
 - Subclass changes additional attributes, not changed by the parent
 - Subclass includes additional exceptions.  (If more exceptions are needed, they should go into the parent class)
 
+Sticking to this avoids creating likely undetected problems further down the track.
+
 **The golden rule for ineritance**: No LSP - No Inheritance
 
-Sticking to this avoids creating likely undetected problems further down the track.
+An example of a breach of LSP the circle-elipse (or rectangle-square) problem.  If a square class is inhereted from a rectangle class, but internally sets the two sides to be equal from just one parameter *w*, then the behaviour has changed.  The rectangle class could not be substituted for the square class, because setting the height *h* would no longer have any effect.  So it is a violation of LSP.
+
+### Managing data access
+By default all attribute and methods of any class is public.  They can be accessed from outside the class.  This is not the case in all programming languages.  There are ways to restrict data access.
+
+- Naming conventions (discussed below)
+- Use `@property` to customise access
+- Overriding `__getattr__()` and `setattr__()` constructors
+
+By convention, to indicate to other developers that a variable or method should not be accessed from outside the class a leading underscore is used  `obj._my_variable`, or `obj._method_name()`.  To make an attribute protectected so it can not be used at all, or inhereted by sub-classes use a double underscore `__my_variable`  Just remember not to use trailing double underscores, as those are reserved for built-in methods like `__init__()`
+
+For example:
+```Python
+class Car:
+    def __init__(self):
+        print ("Engine started")
+        self.name = "corolla"
+        self.__make = "toyota"
+        self._model = 1999
+
+car_a = Car()
+print(car_a.name)
+>>> corolla
+
+print(car_a.make)
+>>> AttributeError: 'Car' object has no attribute 'make'
+```
+
+The main reason to use `__` is to prevent name clashes.  Somebody might inadvertantly use a variable name in an inhereted class that clashes with something already in the class, and over-write it.  
+
+
