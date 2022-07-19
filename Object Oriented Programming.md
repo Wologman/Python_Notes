@@ -148,6 +148,8 @@ An instance level attribute needs defining using `self.attribute = some_value` w
 
 The class level attribute can be changed by re-asignment with `ClassName.CLASS_ATTRIBUTE_NAME = some_new_value`
 
+To access the class level attribute within a function use `ClassName.CLASS_ATTRIBUTE_NAME`
+
 ## Class level methods
 Regular methods are already shared between every instance.
 It is also possible to bind a method to a class, without any instance data.  So something in this form:
@@ -441,7 +443,9 @@ Polymorphishm is the use of a unified interface to unified interface to operate 
 
 For example, the *withdraw* method in earlier banking examples should operate in the same way on each account (all that changes is the output, for example some accounts may have a withdrawl fee, others don't, either way they should be designed to operate with the same number of arguments)
 
-### LSP
+# Class Design Best Practices
+
+## LSP
 Inheretance should only be used if it satisfies the Liskov substitution principle:
 
 *Base class hould be interchangeable with any of its subclasses without altering any properties of the program*
@@ -464,7 +468,7 @@ Sticking to this avoids creating likely undetected problems further down the tra
 
 An example of a breach of LSP the circle-elipse (or rectangle-square) problem.  If a square class is inhereted from a rectangle class, but internally sets the two sides to be equal from just one parameter *w*, then the behaviour has changed.  The rectangle class could not be substituted for the square class, because setting the height *h* would no longer have any effect.  So it is a violation of LSP.
 
-### Managing data access
+## Managing data access
 By default all attribute and methods of any class is public.  They can be accessed from outside the class.  This is not the case in all programming languages.  There are ways to restrict data access.
 
 - Naming conventions (discussed below)
@@ -490,6 +494,9 @@ print(car_a.make)
 >>> AttributeError: 'Car' object has no attribute 'make'
 ```
 
-The main reason to use `__` is to prevent name clashes.  Somebody might inadvertantly use a variable name in an inhereted class that clashes with something already in the class, and over-write it.  
+The main reason to use `__` is to prevent name clashes, as it is not inhereted.  Somebody might inadvertantly use a variable name in an inhereted class that clashes with something already in the parent class, and over-write it.  
 
+## Managing attribute type access
+For notes about decorators refer to: [[Tricky Programming Structures#Decorators]]
 
+Then go-over this topic again so I understand it properly.

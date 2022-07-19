@@ -1,13 +1,19 @@
-### Lamda Functions
+# Lamda Functions
 
-### Decorators
+# Decorators
 [Start with this](https://www.geeksforgeeks.org/decorators-in-python/)
+[Or this one](https://realpython.com/primer-on-python-decorators/)
 
-### List Comprehensions
+Decorators are used to modify the behaviours of functions or classes.
 
-### Good practice for relative/absolute paths to modules
 
-### Pythonic ways to do set variables with conditional statements
+
+
+# List Comprehensions
+
+# Good practice for relative/absolute paths to modules
+
+# Pythonic ways to do set variables with conditional statements
 Just a bit more compact than the obvious multi-line ways.
 
 #### One-line if-else
@@ -36,5 +42,14 @@ print_coords(lat, long)
 >>> 57.68°N, 11.98°E
 ```
 
+## Return a boolean from an expression
+```Python
+lat = 60
+long = 30
 
+Answer = (lat > long)
+print(Answer)
+
+>>> True
+```
 
