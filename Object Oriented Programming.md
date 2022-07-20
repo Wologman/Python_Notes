@@ -34,8 +34,12 @@ class Customer:
 	def identify(self, name);
 		print('I am Customer ' + name)
 ```
-
 The method is just a typical Python function definition, except for the *self* argument.  The self is a special argument, refering to the data object, being an argument in the function.  Remember the class definition is just a template for objects, not an actual object.  
+
+A method can do things like:
+- Make changes that don't change the class attributes (a static method)
+- Make changes to the class attribute, when called from ouside the class, with or without some required arguments.
+- Automatically perform the above on initialisation of each object, if they are included in the `__init__` constructor (see [[#The __init__ constructor]])
 
 To call the method above the syntax would be:
 ```python
