@@ -11,9 +11,9 @@ Decorators are used to modify the behaviours of functions or classes.
 
 # List Comprehensions
 
-# Good practice for relative/absolute paths to modules
+# Relative/absolute paths to modules
 
-# Pythonic ways to do set variables with conditional statements
+# Set variables with conditional statements
 Just a bit more compact than the obvious multi-line ways.
 
 #### One-line if-else
@@ -28,7 +28,7 @@ print('N' if lat < 0 else 'S')
 >>> S 
 ```
 
-##### Use Boolean values in a one-line conditional statement
+#### Use Boolean values in a one-line conditional statement
 This is very nice when possible, use the equivalense of true=1, and false=0.  For example:
 ```Python
 def print_coords(lat, long):
@@ -42,7 +42,7 @@ print_coords(lat, long)
 >>> 57.68°N, 11.98°E
 ```
 
-## Return a boolean from an expression
+### Return a boolean from an expression
 ```Python
 lat = 60
 long = 30
