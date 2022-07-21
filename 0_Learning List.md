@@ -1,6 +1,6 @@
 TODO
 
-- Understand the best way to setup VScode, so that the linting, code completion, library imports work, in general, and for QGIS
+- Understand the best way to setup VScode, and .env file use so that the linting, code completion, library imports work, in general, and for QGIS.
 
 - Understand more about python envonments
 
@@ -13,3 +13,8 @@ TODO
 - Master OOP concepts so I can use them on new projects & also be more comfortable with Pytorch
 
 - Setup a template workspace for python development.  And remember how to use the ipython window, examine variables etc.   I should probably do a refresher VSCode course.
+
+- Build up a base of consistant code for my most common problems
+
+- Finish writing up or learning the other topics in the file list
+

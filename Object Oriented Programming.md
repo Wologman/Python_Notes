@@ -501,6 +501,6 @@ print(car_a.make)
 The main reason to use `__` is to prevent name clashes, as it is not inhereted.  Somebody might inadvertantly use a variable name in an inhereted class that clashes with something already in the parent class, and over-write it.  
 
 ## Managing attribute type access
-For notes about decorators refer to: [[Tricky Programming Structures#Decorators]]
+For notes about decorators refer to: [[Tricky Python Structures#Decorators]]
 
 Then go-over this topic again so I understand it properly.
