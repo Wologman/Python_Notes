@@ -288,7 +288,7 @@ Notice how in the very last line, the parent method was called and passed an obj
 Also remember `*args` and `**kwargs`  are ways to set up the function for an unknown number of arguments, or keyword arguments.  For this example it makes sense, because there are lots of possible arguments that can be used for a Pandas DF, no point trying to include them all here.
 
 ## Customising python comparison operators
-By default, two objects withe the same values for thier attributes are not equal, since they are still seperate objects, stored in different memory locations, with a different memory reference id.  However this behaviour can be changed by defining a different equality operator within the class definition.  Many classes use this, for example Pandas DFs, are considered `==` if the values in them are identical.  
+By default, two objects withe the same values for their attributes are not equal, since they are still seperate objects, stored in different memory locations, with a different memory reference id.  However this behaviour can be changed by defining a different equality operator within the class definition.  Many classes use this, for example Pandas DFs, are considered `==` if the values in them are identical.  
 
 For example below we redefine `==` to be true if the attributes `id` and `name` are equal:
 
@@ -303,7 +303,6 @@ class Customer:
 Using () around an expression returns a boolean.  It is possible to modify the other comparison operators also.  `!=, >=, <=, >, <`    If a child and a parent class both have a customised operator, the child one takes precidence, like other mothods and attribute values.
 
 It is also good practice to check that two objects are the same type when making comparisons.  Such as in the example below:
-
 ```Python
 class BankAccount:
 
