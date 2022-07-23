@@ -56,7 +56,52 @@ first()
 
 
 
-# List Comprehensions
+# Comprehensions
+## List comprehensions
+[Based on this explanation](https://treyhunner.com/2015/12/python-list-comprehensions-now-in-color/)
+List comprehensions are just a super convenient way to create one list as a subset of another, with an optional transformation as well.  
+
+```
+new_things = [] 
+for ITEM in old_things: 
+	if condition_based_on(ITEM): 
+		new_things.append(some__transform(ITEM))
+```
+
+The above becomes:
+```python
+new_things = [some_transform(ITEM) for ITEM in old_things if condition_based_on(ITEM)]
+```
+
+It's that easy!  But gets a bit more tricky for a nested loop.  Here is an example:
+```python
+#The long way:
+flattened = []
+for row in matrix:
+    for n in row:
+        flattened.append(n)
+
+#List comprehension:
+flattened = [n for row in matrix for n in row]
+```
+Just be careful to get the order of the two `for` statements right, or the loops will be swapped.
+
+## Dictionary and set comprehensions
+The syntax is much the same for dictionaries and sets, or any other iterable.  
+
+This example produces a set.  ```first_letters = {w[0] for w in words}``` Note the curly brackets, doesn't make it a dictionary, `{}` when empty is reserved specifically for dictionsries, but `{1, 2, 3}` is a set.
+
+Here is a handy way to swap the keys and values for a dictionary (just be careful to only use this if the values are unique!)
+
+```Python
+#long way
+flipped = {}
+for key, value in original.items():
+    flipped[value] = key
+
+# dict comprehension
+flipped = {value: key for key, value in original.items()}
+```
 
 # Relative/absolute paths to modules
 
