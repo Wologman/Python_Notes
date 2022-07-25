@@ -11,6 +11,25 @@ Functions are *first class objects*, meaning that they can be stored as any othe
 
 When a function is being passed as an object, there are no `()`, because it is not actually being evalueted, it is just a reverence to the function object.  the `()` (with arguments if they are needed) implies the evaluation of the function. 
 
+An example of passing a function to another function is below.  `say_hello`  and `be_awesome` are passed to a third function `greet_bob`, which takes those functions as an input, and does something with them.
+
+```Python
+def say_hello(name):
+    return f"Hello {name}"
+
+def be_awesome(name):
+    return f"Yo {name}, together we are the awesomest!"
+
+def greet_bob(greeter_func):
+    return greeter_func("Bob")
+
+>>> greet_bob(say_hello)
+>>> 'Hello Bob'
+
+>>> greet_bob(be_awesome)
+>>> 'Yo Bob, together we are the awesomest'
+```
+
 A local function inside another function can not be accessed unless it is returned as a result from that function.  Here is an example of this:
 
 ```Python
@@ -46,13 +65,36 @@ first()
 'Call me Liam'
 ```
 
+## Simple Decorators
+So consider this example below, using familiar syntax discussed above. 
+
+```python
+def my_decorator(in_func):
+    def wrapper():
+        print("Something is happening before the function is called.")
+        in_func()
+        print("Something is happening after the function is called.")
+    return wrapper
+
+def say_whee():
+    print("Whee!")
+
+say_whee = my_decorator(say_whee)
+```
+ 
+ The decoration line  `say_whee = my_decorator(say_whee)` turns say_whee (without `()`) into a reference to a function `mydecorator(say_whee)`. So when say_whee() is called for evaluation (with `())`,  instead of simply printing "Whee" as it would from the `say_whee()` function definition, we get a function modified by the `my_decorator` function which returns the `wrapper` function as an object.  
+ 
+```python
+>>> say_whee()
+>>> Something is happening before the function is called.
+>>> Whee!
+>>> Something is happening after the function is called.
+```
+
+This is decoration.  **decorators wrap a function, modifying its behavior.**
 
 
-
-## Functions passed to other functions
-## Decorators
 ## Special decorators within class definitions
-
 
 
 
