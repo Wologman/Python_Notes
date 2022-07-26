@@ -9,10 +9,9 @@ Decorators are used to modify the behaviours of functions, including class metho
 ## Understand functions as objects 
 Functions are *first class objects*, meaning that they can be stored as any other object (in a list for example), or they can be passed into another function as an argument, or returned from another function as a result.
 
-When a function is being passed as an object, there are no `()`, because it is not actually being evalueted, it is just a reverence to the function object.  the `()` (with arguments if they are needed) implies the evaluation of the function. 
+When a function is being passed as an object, there are no `()`, because it is not actually being evalueted, it is just a reverence to the function object.  The `()` (with arguments if they are needed) implies the evaluation of the function. 
 
-An example of passing a function to another function is below.  `say_hello`  and `be_awesome` are passed to a third function `greet_bob`, which takes those functions as an input, and does something with them.
-
+An example of passing a function to another function is below.  `say_hello`  and `be_awesome` are passed to a third function `greet_bob`, which takes those functions as an argument, and does something with them.
 ```Python
 def say_hello(name):
     return f"Hello {name}"
@@ -54,7 +53,6 @@ first
 second
 >>> <function parent.<locals>.second_child at 0x7f599dad5268>
 ```
-
 The output above is saying that first & second are local functions within a parent. But since they are assigned from the output they are now accessable.
 
 ```Python
@@ -65,9 +63,8 @@ first()
 'Call me Liam'
 ```
 
-## Simple Decorators
-So consider this example below, using familiar syntax discussed above. 
-
+## Simple Decorator with out using @ syntax
+To put it most simply.  **Decorators wrap a function, modifying its behavior.** Consider this example below, using familiar syntax discussed above. 
 ```python
 def my_decorator(in_func):
     def wrapper():
@@ -80,10 +77,10 @@ def say_whee():
     print("Whee!")
 
 say_whee = my_decorator(say_whee)
+# This like modifying any object, eg x = x + 5,  x now references something different.
 ```
- 
- The decoration line  `say_whee = my_decorator(say_whee)` turns say_whee (without `()`) into a reference to a function `mydecorator(say_whee)`. So when say_whee() is called for evaluation (with `())`,  instead of simply printing "Whee" as it would from the `say_whee()` function definition, we get a function modified by the `my_decorator` function which returns the `wrapper` function as an object.  
- 
+  The decoration line  `say_whee = my_decorator(say_whee)` turns say_whee (without `()`) into a reference to a function `mydecorator(say_whee)`. So when say_whee() is called for evaluation (with `())`,  instead of simply printing "Whee" as it would from the `say_whee()` function definition, we get a function modified by the `my_decorator` function which returns the `wrapper` function as an object.  
+
 ```python
 >>> say_whee()
 >>> Something is happening before the function is called.
@@ -91,10 +88,32 @@ say_whee = my_decorator(say_whee)
 >>> Something is happening after the function is called.
 ```
 
-This is decoration.  **decorators wrap a function, modifying its behavior.**
+## Simple decorator using `@` (pie syntax)
+This does exactly the same as the previous example `@` is a shorthand way to replace the second half.  It also makes it more obvious that the intent is to modify the `say_whee` using a wrapper function.
+```python
+def my_decorator(func):
+    def wrapper():
+        print("Something is happening before the function is called.")
+        func()
+        print("Something is happening after the function is called.")
+    return wrapper
 
+@my_decorator
+def say_whee():
+    print("Whee!")
+    ````
+This is the behaviour like before:
 
-## Special decorators within class definitions
+```python
+>>> say_whee()
+>>> Something is happening before the function is called.
+>>> Whee!
+>>> Something is happening after the function is ca
+```
+## Decoration Use Cases
+### Multi-use decorators
+
+### Special decorators within class definitions
 
 
 
