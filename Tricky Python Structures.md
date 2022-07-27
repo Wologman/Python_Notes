@@ -63,7 +63,7 @@ first()
 'Call me Liam'
 ```
 
-## Simple Decorator with out using @ syntax
+## Simple Decorator with out using `@` syntax
 To put it most simply.  **Decorators wrap a function, modifying its behavior.** Consider this example below, using familiar syntax discussed above. 
 ```python
 def my_decorator(in_func):
@@ -102,16 +102,85 @@ def my_decorator(func):
 def say_whee():
     print("Whee!")
     ````
-This is the behaviour like before:
-
+This is the same behaviour as before:
 ```python
 >>> say_whee()
 >>> Something is happening before the function is called.
 >>> Whee!
 >>> Something is happening after the function is ca
 ```
+
+### Introspection
+If the python introspection tools (`__name__` or `help()`, or just the object reference, eg `say_whee`) are run on a decorated function, what is returned (correctly) may not be helpful, as it is the decorator information, not the original function.  For example, in the above definitions `say_whee.__name__` would return `my_decorator`.  
+
+To get around this the decorators themselves can use the decorator `@functools.wraps` and the introspection will then be directed to the wrapped function instead.
+```python
+import functools
+
+def do_twice(func):
+    @functools.wraps(func)
+    def wrapper_do_twice(*args, **kwargs):
+        func(*args, **kwargs)
+        return func(*args, **kwargs)
+    return wrapper_do_twice
+```
+Now we get a more useful result
+```python
+>>> say_whee.__name__
+>>>'say_whee'
+```
+
 ## Decoration Use Cases
 ### Multi-use decorators
+Decorators don't need to be uniquely useful to a particular function.  It might be attractive to store a collection of commonly used ones in their own module, and call them for various purposes.  Here is a simple example, where the decorators are stored in a module `decorators.py`
+```python
+def do_twice(func):
+    def wrapper_do_twice():
+        func()
+        func()
+    return wrapper_do_twice
+```
+Then to call this from some other script (with the PYTHONPATH variable suitably set)
+```python
+from decorators import do_twice
+
+@do_twice
+def say_whee()
+	print('Whee!')
+
+>>> say_whee()
+>>> Whee!
+>>> Whee!
+```
+
+### Decorating functions with arguments
+Funtions with arguments face the problem that the decorator would also need to be defined for those arguments.  But this makes the decorators less versatile.
+
+The solution is to use `*args` and `**kwargs` as placeholders in the decorator definition for aguments and keyword arguments of unknown number (potentially zero)
+```python
+def do_twice(func):
+    def wrapper_do_twice(*args, **kwargs):
+        func(*args, **kwargs)
+        func(*args, **kwargs)
+    return wrapper_do_twice
+
+@do_twice
+def greet(name):
+    print(f"Hello {name}")
+
+>>> say_whee()  # from before
+>>> Whee!
+>>> Whee!
+>>>
+>>> greet('World')
+>>> Hello World
+>>> Hello World
+```
+
+
+### Returning values from decorated functions
+
+### Nested decorators
 
 ### Special decorators within class definitions
 
@@ -121,7 +190,6 @@ This is the behaviour like before:
 ## List comprehensions
 [Based on this explanation](https://treyhunner.com/2015/12/python-list-comprehensions-now-in-color/)
 List comprehensions are just a super convenient way to create one list as a subset of another, with an optional transformation as well.  
-
 ```
 new_things = [] 
 for ITEM in old_things: 

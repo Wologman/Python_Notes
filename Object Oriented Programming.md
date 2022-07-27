@@ -50,7 +50,7 @@ cust.identify('Laura') # Apply the identify method to the instance
 ```
 So here `cust` has become an instance of the class `Customer`, and this instance is passed to the function `identify`  by the `self` parameter of the function.  As in othis is the equivalent of the function `identify(cust,Laura)` except that when the class definition was written, we don't want to use a specific object that doesn't even exist yet, or may be used any number of times in different instances.
 
-### Add an attrubute to a class
+### Add an attribute to a class
 Set an attribute of an object by using an asignment.  So to extend the previous example by creating a name attribute to the customer class:
 ```python
 class Customer:
