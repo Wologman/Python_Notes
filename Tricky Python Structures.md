@@ -215,11 +215,15 @@ Decorators can be nested simpy by stacking them one after another.  The outer-ms
 
 ### Special decorators within class definitions
 
+I don't quite get these ideas yet.  
 
+`@classmethod()`  Is a built in function decorator, which returns a class method for a given function.
+
+`@property` Is a method that returns the internal attribute storing the data.  
 
 ### Some useful decorator examples
 #### Timer decorators
-To measure the  runtime of a function
+An example of a handy decorator measuring the  runtime of a function
 
 ```Python
 import time
@@ -249,10 +253,7 @@ def waste_some_time(num_times):
 #### Monitor the state of a variable within a function
 
 
-#### Debugging decorators
-
-
-
+#### Debug
 # Comprehensions
 ## List comprehensions
 [Based on this explanation](https://treyhunner.com/2015/12/python-list-comprehensions-now-in-color/)
