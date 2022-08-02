@@ -215,15 +215,17 @@ Decorators can be nested simpy by stacking them one after another.  The outer-ms
 
 ### Special decorators within class definitions
 
-I don't quite get these ideas yet.  
+`@classmethod()`, `@staticmethod()`,  and `@property()`, are built-in decorators commonly used within class definitions.
 
-`@classmethod()`  Is a built in function decorator, which returns a class method for a given function.
+`@classmethod()` returns a class method for a given function.
 
-`@property` Is a method that returns the internal attribute storing the data.  
+`@staticmethod()` returns a static method for a given function.
+
+`@property` returns the internal attribute storing the data.  
 
 ### Some useful decorator examples
 #### Timer decorators
-An example of a handy decorator measuring the  runtime of a function
+An example of a handy decorator measuring the  runtime of a function.  Note that it's also using the functoosl.wraps(func) decorator so it doesn't mess with the Python introspection functionality, and placeholders for any number of arguments.
 
 ```Python
 import time
@@ -249,8 +251,9 @@ def waste_some_time(num_times):
 >>> waste_some_time(999)
 >>>Finished 'waste_some_time' in 0.3260 secs
 ```
+#### Monitor the state of an internal variable within a function
+Say we wish to monitor the internal state of a function, that wouldn't normally be returned, but we don't want to modify the function its self.  This is an excellent reason to use a decorator.
 
-#### Monitor the state of a variable within a function
 
 
 #### Debug

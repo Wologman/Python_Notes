@@ -59,7 +59,6 @@ class Customer:
 		self.name = new_name # Asignment of new_name parameter to .name attribute
 ```
 So at this point we can call the .name parameter with:
-
 ```python
 cust = Customer() # Create an instance of the Customer class
 cust.set_name('Laura') # Apply the identify method to the instance
@@ -147,29 +146,32 @@ A class level data attribute can be stored in the class definition, and will app
 class MyClass:
 	CLASS_ATTRIBUTE_NAME = some_value
 ```
-
 An instance level attribute needs defining using `self.attribute = some_value` where the value must be passed in as a parameter, or use a default value from the `__init__()` constructor.
 
 The class level attribute can be changed by re-asignment with `ClassName.CLASS_ATTRIBUTE_NAME = some_new_value`
 
 To access the class level attribute within a function use `ClassName.CLASS_ATTRIBUTE_NAME`
 
-## Class level methods
-Regular methods are already shared between every instance.
-It is also possible to bind a method to a class, without any instance data.  So something in this form:
+## Type > Class > Object 
+In Python, classes are also objects, and instances of a `type` class.  Class attributes can be changed, and if this is done, the change will effect all objects of that class.
 
+### Instance methods
+Regular instance methods, discussed already are shared between every instance. They can access and modify the instance states via the `self` parameter.
+
+Allthough this would be unusual, it is also possible to access and modify the class states through `self.__class__` attribute.
+
+### Class level methods
+It is also possible to bind a method to a class, by using the built-in  `@classmethod` decorator and modify class states without any instance data.  So something in this form:
 ```Python
 class MyClass:
-	@classmethod       # Use a decorator to declare it as a class method
+	@classmethod    # Use a decorator to declare it as a class method
 	def my_awsome_method(cls,args...)
 		# Do some stuff
 		# Do not use any instance attributes
 
 MyClass.my_awesome_method(args)
 ```
-
 Note that the method is called from `Class.method()` rather than `object.method()`  The main use case for doing this would to be to create an alternative constructor.  For example transform the data some way before the `__init__()` is called.  Here is an example where the data can be added from a file instead of as parameters:
-
 ```python
 class Employee:
 	def __init__(self, name, salary=30000):
@@ -183,10 +185,32 @@ class Employee:
 			name = f.readline()
 		return cls(name)
 ```
-
 When the above is called by `emp = Employee.from_file("some_file.txt")`  what happens is the class method is envoked, then passes the resulting name to the class using the `__init__` constructor.   So now the object `emp` has been instantiated with a name from a file, instead of needing the argument name.
 
+### Static methods
+To create a static method, use the built-in `@staticmethodd` decorator befor the definition
 
+Static methods are the most restricted methods of a class.  They can not modify the internal state of an object instance, or class states.  Also, they do not necessarily need to use any internal states of the class.  If this were the case, they could potentially be made a seperate function.  
+
+It makes sense to use a static method in the class definition, if it is somehow related specifically to that class.  For example: Calculate area of a circle, might sit well in a circle class, but may not necessarily be used to set an internal 'area' atribute.
+
+A static method has an advantage over a regular method in that it does not need an instance object to be used.   
+
+### A basic example using all three method types
+This is a trivial boilerplate example, just highlighting the difference between regular, static and class methods.
+```Python
+class MyClass:
+    def method(self):
+        return 'instance method called', self
+
+    @classmethod
+    def classmethod(cls):
+        return 'class method called', cls
+
+    @staticmethod
+    def staticmethod():
+        return 'static method called'
+```
 # Inheritance
 Class Inheritance is what makes OOP efficient for code-reuse.  A new class inherits the original class functionality, but more can be easily added.  By allowing the same template to be used multiple times across a larger code-base.  Or for an existing class in another module to be used as a starting point for a more customised class.
 
@@ -225,7 +249,6 @@ print(mng.name)
 
 >>> mng.display()
 ```
-
 Or another  example we can initialise the child class with an extra parameter, by calling the `__init__()` consructor from the parent.  In the example below, we add an attribute `interest_rate` to a child of a parent class that didn't have one.
 ```Python
 class SavingsAccount(BankAccount):
@@ -264,9 +287,7 @@ Print(check_acct.amount, bank_account.amount )
 
 >>> 795 800
 ```
-
 Here is an example modifying the Pandas DataFrame class to allow the use of timestamps:
-
 ```Python
 import pandas as pd
 
@@ -282,7 +303,6 @@ class LoggedDF(pd.DataFrame):
 
 	pd.DataFrame.to_csv(temp, *args, **kwargs)
 ```
-
 Notice how in the very last line, the parent method was called and passed an object to it that isn't `self`. When you call parent methods in the class, they should accept _some_ object as the first argument, and that object is _usually_ `self`, but it doesn't have to be.
 
 Also remember `*args` and `**kwargs`  are ways to set up the function for an unknown number of arguments, or keyword arguments.  For this example it makes sense, because there are lots of possible arguments that can be used for a Pandas DF, no point trying to include them all here.
@@ -291,7 +311,6 @@ Also remember `*args` and `**kwargs`  are ways to set up the function for an unk
 By default, two objects withe the same values for their attributes are not equal, since they are still seperate objects, stored in different memory locations, with a different memory reference id.  However this behaviour can be changed by defining a different equality operator within the class definition.  Many classes use this, for example Pandas DFs, are considered `==` if the values in them are identical.  
 
 For example below we redefine `==` to be true if the attributes `id` and `name` are equal:
-
 ```Python
 class Customer:
 	def __init(self, id, name)
@@ -299,7 +318,6 @@ class Customer:
 	def __eq__(self, other) # A special constructor, called when == is used
 		return (self.id == other.id) and (self.name ==other.name)
 ```
-
 Using () around an expression returns a boolean.  It is possible to modify the other comparison operators also.  `!=, >=, <=, >, <`    If a child and a parent class both have a customised operator, the child one takes precidence, like other mothods and attribute values.
 
 It is also good practice to check that two objects are the same type when making comparisons.  Such as in the example below:
@@ -332,7 +350,6 @@ print(np.array([1,2,3]))
 
 >>> [1 2 3]
 ```
-
 `__repr__()` method is used when we call `repr(obj)`, and should contain all the structure needed to reproduce the object.  For example
 ```Python
 import numpy as np
@@ -340,9 +357,7 @@ repr(np.array([1,2,3]))
 
 >>> array([1, 2, 3])
 ```
-
 Here is an example where both `__str__` and `__repr__` are defined:
-
 ```python
 class Employee:
 	def __init__(self, name, salary=30000):
@@ -391,7 +406,6 @@ print(invert_at_index(a, 5)) # Potential IndexError
 >>> index out of range! 
 >>> None
 ```
-
 If it is necessary to raise an exception yourself (even though the code may run without built-in errors).  In this case use `raise`.  For example:
 ```Python
 def make_list_of_ones(length)
@@ -400,7 +414,6 @@ def make_list_of_ones(length)
 	return [1]*length
 ```
 If no suitable exception exists a custom exception can be made by inherting and adding to an existing exception class.  For example for the earlier banking Customer class, if we want an exception for a negative balance:
-
 ```python
 class BalanceError(Exception): pass # Created an empty sub-class of Exception
 
@@ -412,7 +425,6 @@ class Customer:
 		self.name, self.balance = name, balance
 ```
 Here is a less trivial example with two exceptions:
-
 ```Python
 class SalaryError(ValueError): pass
 class BonusError(SalaryError): pass
@@ -440,14 +452,12 @@ def give_bonus(self, amount):
 
 Best to list except blocks in order of specifity, from child -> parent so the most informative error is caught before the more general one.
 
-
 # Polymorphism
 Polymorphishm is the use of a unified interface to unified interface to operate on objects of different classes.  In this way a higher order function that uses a collection of objects, not necessarily from the same sub-classes can operate consistantly on them without needing to know their sub-type.
 
 For example, the *withdraw* method in earlier banking examples should operate in the same way on each account (all that changes is the output, for example some accounts may have a withdrawl fee, others don't, either way they should be designed to operate with the same number of arguments)
 
 # Class Design Best Practices
-
 ## LSP
 Inheretance should only be used if it satisfies the Liskov substitution principle:
 
