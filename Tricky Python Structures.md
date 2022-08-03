@@ -180,7 +180,6 @@ def greet(name):
 >>> Hello World
 >>> Hello World
 ```
-
 ### Returning values from decorated functions
 Just remember that the wrapper function by default does not return anything.  So if the function being decorated is intended to return a result, this will have to be built into the decorator return statement too.
 
@@ -251,12 +250,63 @@ def waste_some_time(num_times):
 >>> waste_some_time(999)
 >>>Finished 'waste_some_time' in 0.3260 secs
 ```
+#### Decorator to help debugging
+
+
+
+
 #### Monitor the state of an internal variable within a function
-Say we wish to monitor the internal state of a function, that wouldn't normally be returned, but we don't want to modify the function its self.  This is an excellent reason to use a decorator.
+Say we wish to monitor some state of a function, that wouldn't normally be returned, but we don't want to modify the function its self.  This is an excellent reason to use a decorator.
 
+Here is a simple example where we store a state, in this case the number of calls of a function, in the wrapper.
 
+```Python
+import functools
 
-#### Debug
+def count_calls(func):
+    @functools.wraps(func)
+    def wrapper_count_calls(*args, **kwargs):
+        wrapper_count_calls.num_calls += 1
+        print(f"Call {wrapper_count_calls.num_calls} of {func.__name__!r}")
+        return func(*args, **kwargs)
+    wrapper_count_calls.num_calls = 0
+    return wrapper_count_calls
+
+@count_calls
+def say_whee():
+    print("Whee!")
+
+>>> say_whee()
+>>> Call 1 of 'say_whee'
+>>> Whee!
+
+>>> say_whee()
+>>> Call 2 of 'say_whee'
+>>> Whee!
+```
+
+#### Monitor state using a class as a decorator
+Since we are trying to monitor a state, the OOP way to do this is to use a class.  Classes can be decorators too, but they need to be made callable using the `.__call__()` constructor, which takes the place of the previously used function.  We also need an `__init__()`  constructor, to initialise the instance and the states to be monitored.
+
+Here is the previous example rewritten as a class:
+
+```python
+import functools
+
+class CountCalls:
+    def __init__(self, func):
+        functools.update_wrapper(self, func)
+        self.func = func
+        self.num_calls = 0
+
+    def __call__(self, *args, **kwargs):
+        self.num_calls += 1
+        print(f"Call {self.num_calls} of {self.func.__name__!r}")
+        return self.func(*args, **kwargs)
+```
+
+The behaviour is exactly the same.  Note that now we use `functools.update_wrapper(self, func)` where previously we would ahve used `@functools.wraps`, to take care of introspection.
+
 # Comprehensions
 ## List comprehensions
 [Based on this explanation](https://treyhunner.com/2015/12/python-list-comprehensions-now-in-color/)
