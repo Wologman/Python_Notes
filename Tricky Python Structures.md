@@ -69,7 +69,7 @@ The output above is saying that first & second are local functions within a pare
 >>> 'Call me Liam'
 ```
 
-## Simple Decorator with out using `@` syntax
+## Simple Decorator without using `@` syntax
 To put it most simply.  **Decorators wrap a function, modifying its behavior.** Consider this example below, using familiar syntax discussed above. 
 ```python
 def my_decorator(in_func):
@@ -92,6 +92,7 @@ say_whee = my_decorator(say_whee)
 >>> Whee!
 >>> Something is happening after the function is called.
 ```
+
 ## Simple decorator using `@` (pie syntax)
 This does exactly the same as the previous example `@` is a shorthand way to replace the second half.  It also makes it more obvious that the intent is to modify the `say_whee` using a wrapper function.
 ```python
@@ -111,13 +112,13 @@ This is the same behaviour as before:
 >>> say_whee()
 >>> Something is happening before the function is called.
 >>> Whee!
->>> Something is happening after the function is ca
+>>> Something is happening after the function is called
 ```
 
 ### Introspection
-If the python introspection tools (Like `__name__` or `help()`, or just the object reference, eg `say_whee`) are run on a decorated function, what is returned (correctly) but may not be helpful, as it is the decorator information, not the original function information.  For example, in the above definitions `say_whee.__name__` would return `my_decorator`.  
+If the python introspection tools (Like `__name__` or `help()`, or just the object reference, eg `say_whee`) are run on a decorated function, what is returned (correctly) is the decorating function, not the original one, which may not be very helpful.  For example, in the above definitions `say_whee.__name__` would return `my_decorator`.  
 
-To get around this the decorator its self can use the decorator `@functools.wraps` and the introspection will then be directed to the wrapped function instead.  Note that `@functools.wraps(func)` preceeds the wrapper function, just like any other decorator.
+To get around this the decorator its self can use the decorator from the functools library `@functools.wraps` and the introspection will then be directed to the wrapped function instead.  Note that `@functools.wraps(func)` preceeds the wrapper function, just like any other decorator.
 ```python
 import functools
 
@@ -134,7 +135,7 @@ Now we get a more useful result
 >>>'say_whee'
 ```
 
-## Decoration Use Cases
+## More complex decorator structures
 ### Multi-use decorators
 Decorators don't need to be uniquely useful to a particular function.  It might be attractive to store a collection of commonly used decorators in their own module, and call them for various purposes.  Here is a simple example, where the decorators are stored in the module `decorators.py`
 ```python
@@ -160,7 +161,7 @@ def say_whee()
 ### Decorating functions with arguments
 Funtions with arguments face the problem that the decorator would also need to be defined for those arguments.  But this makes the decorators less versatile.
 
-The solution is to use `*args` and `**kwargs` as placeholders in the decorator definition for an unknown number  (potentially zero) of aguments and keyword.
+The solution is to use `*args` and `**kwargs` as placeholders in the decorator definition for an unknown number  of aguments and keyword arguments (potentially none).
 ```python
 def do_twice(func):
     def wrapper_do_twice(*args, **kwargs):
@@ -180,6 +181,15 @@ def greet(name):
 >>> Hello World
 >>> Hello World
 ```
+
+### Decorators with arguments themselves
+Suppose we want to make the decorator its self behave in a changable way by using arguments.  For example, extend the above `do_twice()` decorator to any `@repeat(n_times)`.  We can do this by wrapping a second function around the decorated function to handle the arguments and create a closure.    -- elaborate on this.
+
+
+
+
+
+
 ### Returning values from decorated functions
 Just remember that the wrapper function by default does not return anything.  So if the function being decorated is intended to return a result, this will have to be built into the decorator return statement too.
 
@@ -213,8 +223,7 @@ Notice how above the returned result is only printed once, while the static meth
 Decorators can be nested simpy by stacking them one after another.  The outer-msot decorator goes first.  Just be careful with the above points about returning results, and comping with arguments.
 
 ### Special decorators within class definitions
-
-`@classmethod()`, `@staticmethod()`,  and `@property()`, are built-in decorators commonly used within class definitions.
+`@classmethod()`, `@staticmethod()`,  and `@property()`, are built-in decorators commonly used within class definitions.  So they are wrapping a regular instance methods and variables in a function & structure that limits some of their uses.  This is discussed further  in [[Object Oriented Programming]]
 
 `@classmethod()` returns a class method for a given function.
 
@@ -222,9 +231,9 @@ Decorators can be nested simpy by stacking them one after another.  The outer-ms
 
 `@property` returns the internal attribute storing the data.  
 
-### Some useful decorator examples
-#### Timer decorators
-An example of a handy decorator measuring the  runtime of a function.  Note that it's also using the functoosl.wraps(func) decorator so it doesn't mess with the Python introspection functionality, and placeholders for any number of arguments.
+## Some useful decorator examples
+### Timer decorators
+An example of a handy decorator measuring the  runtime of a function.  Note that it's also using the functools.wraps(func) decorator so it doesn't mess with the Python introspection functionality, and placeholders for any number of arguments.
 
 ```Python
 import time
@@ -250,12 +259,36 @@ def waste_some_time(num_times):
 >>> waste_some_time(999)
 >>>Finished 'waste_some_time' in 0.3260 secs
 ```
-#### Decorator to help debugging
 
+### Using a decorator to help debugging
+The following `@debug` decorator will print the arguments a function is called with as well as its return value every time the function is called:
 
+```python
+import functools
 
+def debug(func):
+    """Print the function signature and return value"""
+    @functools.wraps(func)
+    def wrapper_debug(*args, **kwargs):
+        args_repr = [repr(a) for a in args]                      # 1
+        kwargs_repr = [f"{k}={v!r}" for k, v in kwargs.items()]  # 2
+        signature = ", ".join(args_repr + kwargs_repr)           # 3
+        print(f"Calling {func.__name__}({signature})")
+        value = func(*args, **kwargs)
+        print(f"{func.__name__!r} returned {value!r}")           # 4
+        return value
+    return wrapper_debug
+```
 
-#### Monitor the state of an internal variable within a function
+Breaking down the above with some explanation:
+1. Creates a list of the positional arugments using the repr() function.  
+2. Create a list of the keyword arguments
+3. Join the above together.
+4. Print the return value
+
+With a simple function you write yourself, there might be easier ways to debug, but this could also be applied to some imported function you don't really know much about.
+
+### Monitor the state of a variable related to a function
 Say we wish to monitor some state of a function, that wouldn't normally be returned, but we don't want to modify the function its self.  This is an excellent reason to use a decorator.
 
 Here is a simple example where we store a state, in this case the number of calls of a function, in the wrapper.
@@ -286,7 +319,7 @@ def say_whee():
 ```
 
 #### Monitor state using a class as a decorator
-Since we are trying to monitor a state, the OOP way to do this is to use a class.  Classes can be decorators too, but they need to be made callable using the `.__call__()` constructor, which takes the place of the previously used function.  We also need an `__init__()`  constructor, to initialise the instance and the states to be monitored.
+Since we are trying to monitor a state, the OOP way to do this is to use a class.  Classes can be decorators too, but they need to be made callable using the `.__call__()` constructor, which takes the place of the previously used wrapper function.  We also need an `__init__()`  constructor, to initialise the instance and the states to be monitored.
 
 Here is the previous example rewritten as a class:
 
@@ -305,9 +338,11 @@ class CountCalls:
         return self.func(*args, **kwargs)
 ```
 
-The behaviour is exactly the same.  Note that now we use `functools.update_wrapper(self, func)` where previously we would ahve used `@functools.wraps`, to take care of introspection.
+The behaviour is exactly the same.  Note that now we use `functools.update_wrapper(self, func)` where previously we would have used `@functools.wraps`, to take care of introspection.
 
 # Comprehensions
+Comprehensions are a handy way to conditionally select some elements from a Python iterable.
+
 ## List comprehensions
 [Based on this explanation](https://treyhunner.com/2015/12/python-list-comprehensions-now-in-color/)
 List comprehensions are just a super convenient way to create one list as a subset of another, with an optional transformation as well.  
@@ -358,19 +393,20 @@ flipped = {value: key for key, value in original.items()}
 # Set variables with conditional statements
 Just a bit more compact than the obvious multi-line ways.
 
-#### One-line if-else
+## One-line if-else
 ```Python
 true_expression if conditional else false_expression
 #for example:
 y = 4 if x <10 else y = 5
 
 # another example:
+lat, long = -45, 73
 print('N' if lat < 0 else 'S')
 
 >>> S 
 ```
 
-#### Use Boolean values in a one-line conditional statement
+## Boolean values in a one-line conditional statement
 This is very nice when possible, use the equivalense of true=1, and false=0.  For example:
 ```Python
 def print_coords(lat, long):
@@ -384,7 +420,7 @@ print_coords(lat, long)
 >>> 57.68°N, 11.98°E
 ```
 
-### Return a boolean from an expression
+## Return a boolean from an expression
 ```Python
 lat = 60
 long = 30
