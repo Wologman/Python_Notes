@@ -19,6 +19,7 @@ Functions are *first class objects*, meaning that they can be stored as any othe
 When a function is being passed as an object, there are no `()`, because it is not actually being evaluated, it is just a reverence to the function object.  The `()` (with arguments if they are needed) implies the evaluation of the function. 
 
 An example of passing a function to another function is below.  `say_hello`  and `be_awesome` are passed to a third function `greet_bob`, which takes those functions as an argument, and does something with them.
+
 ```Python
 def say_hello(name):
     return f"Hello {name}"
@@ -37,6 +38,7 @@ def greet_bob(greeter_func):
 ```
 
 A local function inside another function can not be accessed unless it is returned as a result from that function.  Here is an example of this:
+
 ```Python
 def parent(num):
     def first_child():
@@ -59,6 +61,7 @@ first
 second
 >>> <function parent.<locals>.second_child at 0x7f599dad5268>
 ```
+
 The output above is saying that first & second are local functions within a parent. But since they are assigned from the output they are now accessable.
 
 ```Python
@@ -85,6 +88,7 @@ def say_whee():
 say_whee = my_decorator(say_whee)
 # This line like modifying any object, eg x = x + 5,  x now references something different.
 ```
+
   The decoration line  `say_whee = my_decorator(say_whee)` turns say_whee (without `()`) into a reference to a function `mydecorator(say_whee)`. So when say_whee() is called for evaluation (with `())`,  instead of simply printing `'Whee'` as it would from the `say_whee()` function definition, we get a function modified by the `my_decorator` function which returns the `wrapper` function as an object.  
 ```python
 >>> say_whee()
@@ -95,6 +99,7 @@ say_whee = my_decorator(say_whee)
 
 ## Simple decorator using `@` (pie syntax)
 This does exactly the same as the previous example `@` is a shorthand way to replace the second half.  It also makes it more obvious that the intent is to modify the `say_whee` using a wrapper function.
+
 ```python
 def my_decorator(func):
     def wrapper():
@@ -107,7 +112,9 @@ def my_decorator(func):
 def say_whee():
     print("Whee!")
     ````
+
 This is the same behaviour as before:
+
 ```python
 >>> say_whee()
 >>> Something is happening before the function is called.
@@ -129,7 +136,9 @@ def do_twice(func):
         return func(*args, **kwargs)
     return wrapper_do_twice
 ```
-Now we get a more useful result
+
+Now we get a more informative result
+
 ```python
 >>> say_whee.__name__
 >>>'say_whee'
@@ -137,7 +146,8 @@ Now we get a more useful result
 
 ## More complex decorator structures
 ### Multi-use decorators
-Decorators don't need to be uniquely useful to a particular function.  It might be attractive to store a collection of commonly used decorators in their own module, and call them for various purposes.  Here is a simple example, where the decorators are stored in the module `decorators.py`
+Decorators don't need to be uniquely written for a particular function.  It might be attractive to store a collection of commonly used decorators in their own module, and call them for various purposes.  Here is a simple example, where the decorators are stored in the module `decorators.py`
+
 ```python
 def do_twice(func):
     def wrapper_do_twice():
@@ -145,7 +155,9 @@ def do_twice(func):
         func()
     return wrapper_do_twice
 ```
+
 Then to call this from some other script (with the PYTHONPATH variable suitably set)
+
 ```python
 from decorators import do_twice
 
@@ -161,7 +173,7 @@ def say_whee()
 ### Decorating functions with arguments
 Funtions with arguments face the problem that the decorator would also need to be defined for those arguments.  But this makes the decorators less versatile.
 
-The solution is to use `*args` and `**kwargs` as placeholders in the decorator definition for an unknown number  of aguments and keyword arguments (potentially none).
+The solution is to use `*args` and `**kwargs` as placeholders in the decorator definition for an unknown number of aguments and keyword arguments (potentially none).
 ```python
 def do_twice(func):
     def wrapper_do_twice(*args, **kwargs):
@@ -222,7 +234,7 @@ Notice how above the returned result is only printed once, while the static meth
 ### Nested decorators
 Decorators can be nested simpy by stacking them one after another.  The outer-msot decorator goes first.  Just be careful with the above points about returning results, and comping with arguments.
 
-### Special decorators within class definitions
+### Decorating methods within class definitions
 `@classmethod()`, `@staticmethod()`,  and `@property()`, are built-in decorators commonly used within class definitions.  So they are wrapping a regular instance methods and variables in a function & structure that limits some of their uses.  This is discussed further  in [[Object Oriented Programming]]
 
 `@classmethod()` returns a class method for a given function.
@@ -230,6 +242,45 @@ Decorators can be nested simpy by stacking them one after another.  The outer-ms
 `@staticmethod()` returns a static method for a given function.
 
 `@property` returns the internal attribute storing the data.  
+
+It is also possible to decorate the methods within a class just like decorating any other function as discussed in earlier sections.
+
+### Decorating the whole class
+This is also a thing to be aware of, but I'm not likely to use.  Here is an example where a decorator is used to ensure a class is a singleton (a class where there is only one instance)
+
+```python
+import functools
+
+def singleton(cls):
+    """Make a class a Singleton class (only one instance)"""
+    @functools.wraps(cls)
+    def wrapper_singleton(*args, **kwargs):
+        if not wrapper_singleton.instance:
+            wrapper_singleton.instance = cls(*args, **kwargs)
+        return wrapper_singleton.instance
+    wrapper_singleton.instance = None
+    return wrapper_singleton
+
+@singleton
+class TheOne:
+    pass
+
+first_one = TheOne()
+another_one = TheOne()
+```
+
+Now the class `TheOne` is a singleton.  As demonstrated below:
+
+``` python
+>>> id(first_one)
+140094218762280
+
+>>> id(another_one)
+140094218762280
+
+>>> first_one is another_one
+True
+```
 
 ## Some useful decorator examples
 ### Timer decorators
@@ -338,7 +389,7 @@ class CountCalls:
         return self.func(*args, **kwargs)
 ```
 
-The behaviour is exactly the same.  Note that now we use `functools.update_wrapper(self, func)` where previously we would have used `@functools.wraps`, to take care of introspection.
+The behaviour is exactly the same, by decorating functions with `@CountCalls`.  Note that now we use `functools.update_wrapper(self, func)` where previously we would have used `@functools.wraps`, to take care of introspection.
 
 # Comprehensions
 Comprehensions are a handy way to conditionally select some elements from a Python iterable.
