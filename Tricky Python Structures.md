@@ -195,10 +195,40 @@ def greet(name):
 ```
 
 ### Decorators with arguments themselves
+First try to understand the finer points about inner functions in Python. 
+
+#### Closure & Inner (Nested) Functions
+[Based on this tutorial](https://realpython.com/inner-functions-what-are-they-good-for/)
+In Python, inner functions have direct access to the enclosing function, *even after the enclosing function has returned*.  The outer function creates a namespace for the inner function. 
+
+Here is an example calculating the factorial of a number, but doing some validaton before passing the value through to the inner function for evaluation.
+
+```python
+def factorial(number):
+	# Validate input
+	if not isinstance(number, int):
+			raise TypeError("Sorry. 'number' must be an integer.")
+	if number < 0:
+		raise ValueError("Sorry. 'number' must be zero or positive.")
+
+	# Calculate the factorial of number
+	def inner_factorial(number):
+		if number <= 1:
+			return 1
+		return number * inner_factorial(number - 1)
+	return inner_factorial(number)
+
+print(factorial(4))
+
+>>> 24
+```
+
+There is something subtle going on in this example.  The inner function is actually returning its self for evaluation, creating a loop until the variable `number` = 1.  Nice.
+
+
+
+#### Using nested inner functions to pass decorator arguments
 Suppose we want to make the decorator its self behave in a changable way by using arguments.  For example, extend the above `do_twice()` decorator to any `@repeat(n_times)`.  We can do this by wrapping a second function around the decorated function to handle the arguments and create a closure.    -- elaborate on this.
-
-
-
 
 
 
