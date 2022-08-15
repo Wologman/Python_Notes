@@ -199,7 +199,7 @@ First try to understand the finer points about inner functions in Python.
 
 #### Closure & Inner (Nested) Functions
 [Based on this tutorial](https://realpython.com/inner-functions-what-are-they-good-for/)
-In Python, inner functions have direct access to the enclosing function, *even after the enclosing function has returned*.  The outer function creates a namespace for the inner function. 
+In Python, inner functions have direct access to the enclosing function, *even after the enclosing function has returned the inner function* (this would be a *closure*).  The outer function creates a namespace for the inner function. 
 
 Here is an example calculating the factorial of a number, but doing some validaton before passing the value through to the inner function for evaluation.
 
@@ -224,6 +224,12 @@ print(factorial(4))
 ```
 
 There is something subtle going on in this example.  The inner function is actually returning its self for evaluation, creating a loop until the variable `number` = 1.  Nice.
+
+Uses for inner unctions include:
+- Provide encapsulation and hide functions from external access  -- A class definition does this, but so does an inner function inside a normal function.
+- Write helper inner functions
+- Create closures and decorators
+
 
 
 
