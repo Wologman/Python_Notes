@@ -223,15 +223,24 @@ print(factorial(4))
 >>> 24
 ```
 
-There is something subtle going on in this example.  The inner function is actually returning its self for evaluation, creating a loop until the variable `number` = 1.  Nice.
+There is something else subtle going on in this particular example.  The inner function is actually returning its self for evaluation, creating a loop until the variable `number` = 1.  Nice.
 
-Uses for inner unctions include:
+Uses for inner functions include:
 - Provide encapsulation and hide functions from external access  -- A class definition does this, but so does an inner function inside a normal function.
 - Write helper inner functions
 - Create closures and decorators
 
+#### Helper Inner Functions Vs Private Helper Functions
+Using an inner helper function rather than a top-level function has the potential advantage of providing encapsulation.  However if need be the inner function could be extracted as a top-level function by using a single leading underscore.  `_my_inner_function()` so it will be private to that module or class.
 
+#### Retaining state with inner functions by creating closures
+A closure is the encapsulation of an inner function along with variables accessed from the surrounding function.  The process is simple enough:  
 
+1.  Create an inner function.
+2.  Reference variables from the enclosing function.
+3.  Return the inner function.
+
+The returned function now has the variables it accessed as a permanent state.  If it is necessary to change those variables, it will need to be performed with a getter and setter methods, but I'm not going to worry about that now.
 
 #### Using nested inner functions to pass decorator arguments
 Suppose we want to make the decorator its self behave in a changable way by using arguments.  For example, extend the above `do_twice()` decorator to any `@repeat(n_times)`.  We can do this by wrapping a second function around the decorated function to handle the arguments and create a closure.    -- elaborate on this.
@@ -375,7 +384,7 @@ Breaking down the above with some explanation:
 
 With a simple function you write yourself, there might be easier ways to debug, but this could also be applied to some imported function you don't really know much about.
 
-### Monitor the state of a variable related to a function
+### Monitor the state of a function
 Say we wish to monitor some state of a function, that wouldn't normally be returned, but we don't want to modify the function its self.  This is an excellent reason to use a decorator.
 
 Here is a simple example where we store a state, in this case the number of calls of a function, in the wrapper.
@@ -432,7 +441,7 @@ Comprehensions are a handy way to conditionally select some elements from a Pyth
 
 ## List comprehensions
 [Based on this explanation](https://treyhunner.com/2015/12/python-list-comprehensions-now-in-color/)
-List comprehensions are just a super convenient way to create one list as a subset of another, with an optional transformation as well.  
+List comprehensions create one list as a subset of another, with an optional transformation as well.  
 ```
 new_things = [] 
 for ITEM in old_things: 
