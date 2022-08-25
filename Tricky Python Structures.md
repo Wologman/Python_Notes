@@ -243,6 +243,7 @@ A closure is the encapsulation of an inner function along with variables accesse
 The returned function now has the variables it accessed as a permanent state.  If it is necessary to change those variables, it will need to be performed with a getter and setter methods, but I'm not going to worry about that now.
 
 #### Using nested inner functions to pass decorator arguments
+[Also see here](https://www.geeksforgeeks.org/decorators-with-parameters-in-python/)
 Suppose we want to make the decorator its self behave in a changable way by using arguments.  For example, extend the above `do_twice()` decorator to any `@repeat(n_times)`.  We can do this by wrapping a second function around the decorated function to handle the arguments and create a closure.    -- elaborate on this.
 
 ```python
@@ -255,12 +256,25 @@ def repeat(num_times):
             return value
         return wrapper_repeat
     return decorator_repeat
+
+
+@repeat(num_times=3)
+def greet(name):
+	print(f'Hello {name}')
+	
+>>> greet('World')
+>>> Hello World
+>>> Hello World
+>>> Hello World
 ```
+What is happening here is that the inner fuction wrapper_repeat, has access to the enclosing function's arguments.  In this case num_times.
+
 
 ### Returning values from decorated functions
 Just remember that the wrapper function by default does not return anything.  So if the function being decorated is intended to return a result, this will have to be built into the decorator return statement too.
 
 Using the do-twice example from before, but fixing up this to return a result.
+
 ```python
 def do_twice(func):
     def wrapper_do_twice(*args, **kwargs):
