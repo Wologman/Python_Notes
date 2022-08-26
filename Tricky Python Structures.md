@@ -4,8 +4,12 @@
 [[#Comprehensions]]
 [[#Relative absolute paths to modules]]
 [[#Set variables with conditional statements]]
+____
+____
 
 # Lamda Functions
+______
+____
 
 # Decorators
 [Start with this](https://www.geeksforgeeks.org/decorators-in-python/)
@@ -69,7 +73,7 @@ The output above is saying that first & second are local functions within a pare
 >>> 'Hi, I am Emma'
 
 >>> second()
->>> 'Call me Liam'
+>>> 'Call me Em'
 ```
 
 ## Simple Decorator without using `@` syntax
@@ -123,7 +127,7 @@ This is the same behaviour as before:
 ```
 
 ### Introspection
-If the python introspection tools (Like `__name__` or `help()`, or just the object reference, eg `say_whee`) are run on a decorated function, what is returned (correctly) is the decorating function, not the original one, which may not be very helpful.  For example, in the above definitions `say_whee.__name__` would return `my_decorator`.  
+If the python introspection tools (Such as  `__name__` or `help()`, or just the object reference, eg `say_whee` ) are run on a decorated function, what is returned (correctly) is the decorating function, not the original one, which may not be very helpful.  For example, in the above definitions `say_whee.__name__` would return `my_decorator`.  
 
 To get around this the decorator its self can use the decorator from the functools library `@functools.wraps` and the introspection will then be directed to the wrapped function instead.  Note that `@functools.wraps(func)` preceeds the wrapper function, just like any other decorator.
 ```python
@@ -269,7 +273,6 @@ def greet(name):
 ```
 What is happening here is that the inner fuction wrapper_repeat, has access to the enclosing function's arguments.  In this case num_times.
 
-
 ### Returning values from decorated functions
 Just remember that the wrapper function by default does not return anything.  So if the function being decorated is intended to return a result, this will have to be built into the decorator return statement too.
 
@@ -409,7 +412,7 @@ Breaking down the above with some explanation:
 With a simple function you write yourself, there might be easier ways to debug, but this could also be applied to some imported function you don't really know much about.
 
 ### Monitor the state of a function
-Say we wish to monitor some state of a function, that wouldn't normally be returned, but we don't want to modify the function its self.  This is an excellent reason to use a decorator.
+Say we wish to monitor some state, or use of a function, but we don't want to modify the function its self.  This is an excellent reason to use a decorator.
 
 Here is a simple example where we store a state, in this case the number of calls of a function, in the wrapper.
 
@@ -460,6 +463,9 @@ class CountCalls:
 
 The behaviour is exactly the same, by decorating functions with `@CountCalls`.  Note that now we use `functools.update_wrapper(self, func)` where previously we would have used `@functools.wraps`, to take care of introspection.
 
+_______________________________________________________________________
+__________
+
 # Comprehensions
 Comprehensions are a handy way to conditionally select some elements from a Python iterable.
 
@@ -508,7 +514,17 @@ for key, value in original.items():
 flipped = {value: key for key, value in original.items()}
 ```
 
+
+____
+____
+
+
+
 # Relative/absolute paths to modules
+
+____
+____
+
 
 # Set variables with conditional statements
 Just a bit more compact than the obvious multi-line ways.
