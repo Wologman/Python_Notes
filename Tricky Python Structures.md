@@ -248,7 +248,7 @@ The returned function now has the variables it accessed as a permanent state.  I
 
 #### Using nested inner functions to pass decorator arguments
 [Also see here](https://www.geeksforgeeks.org/decorators-with-parameters-in-python/)
-Suppose we want to make the decorator its self behave in a changable way by using arguments.  For example, extend the above `do_twice()` decorator to any `@repeat(n_times)`.  We can do this by wrapping a second function around the decorated function to handle the arguments and create a closure.    -- elaborate on this.
+Suppose we want to make the decorator its self behave in a changable way by using arguments.  For example, extend the above `do_twice()` decorator to any `@repeat(n_times)`.  We can do this by passing arguments to an outer function that encloses and returns the decorator function, creating a closure, so the wrapper function (which takes the decorated function as it's argument) has access to those variables.
 
 ```python
 def repeat(num_times):
@@ -271,7 +271,7 @@ def greet(name):
 >>> Hello World
 >>> Hello World
 ```
-What is happening here is that the inner fuction wrapper_repeat, has access to the enclosing function's arguments.  In this case num_times.
+What is happening here is that the inner fuction wrapper_repeat, has access to the enclosing function's arguments.  In this case num_times. 
 
 ### Returning values from decorated functions
 Just remember that the wrapper function by default does not return anything.  So if the function being decorated is intended to return a result, this will have to be built into the decorator return statement too.
