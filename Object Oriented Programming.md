@@ -211,6 +211,7 @@ class MyClass:
     def staticmethod():
         return 'static method called'
 ```
+
 # Inheritance
 Class Inheritance is what makes OOP efficient for code-reuse.  A new class inherits the original class functionality, but more can be easily added.  By allowing the same template to be used multiple times across a larger code-base.  Or for an existing class in another module to be used as a starting point for a more customised class.
 
