@@ -1,3 +1,6 @@
+I'm only persevering with this because sometimes it's handy to setup VScode on somebody else's system if they don't have a subscription to PyCharm.  VScode is lightweight and free.  Otherwise, just use PyCharm, I don't think VScode is worth the hassle at the moment for anything serious, Especially on Windows, where it seems to run into Conda issues as well..  
+
+But it's a simple light weight way to show a client a Jupyter notebook.  That's something the free version of PyCharm doesn't do, and it's a bit less overhead than installing the full Anaconda.
 
 #### Key ideas in this page: 
 - .VSCode is probably not worth the effort if you need to use environment variables, or project specific python paths from out side the root folder.
@@ -5,9 +8,9 @@
 - .vscode -- As above, but single folder.  
 - settings.json -- A user-wide one for all settings (eg dark-mode)
 - settings.json -- Settings, prioritised for the workspace (Settings stored in the .vscode or .code-workspace  file )
-- PYTHONPATH -- [[Environment Variables]], that tell python where to look for libraries
+- PYTHONPATH -- [[Environment Variables]], that tell Python where to look for libraries
 - The interpreter path -- where VSCode looks for the python interpreter
-- .env files -- Need to be located by the settings.json file for the project, or the python plugin will automatically look in the worspace folder.  Currently not working as documented.
+- .env files -- Need to be located by the settings.json file for the project, or the python plugin will automatically look in the worspace folder.  Currently, not working as documented.
 - Workspace folder -- where the .vscode file is located.  Or multiple folders listed in .code-workspace.
 
 ### Bugs in VSCode
@@ -22,11 +25,11 @@ This is a shambles.  Different issues and paths used for Pylance + Code completi
 
 ##### Workaround ideas
 
-I haven't finished thinking this through.  How many places could I specify a pythonpath?  Launch? Terminal settings, settings, export from the terminal, from the python code, from extrapaths in settings.   
+I haven't finished thinking this through.  How many places could I specify a python path?  Launch? Terminal settings, settings, export from the terminal, from the python code, from extrapaths in settings.   
 
 - Switch to PyCharm, or Spyder [Here are the isntructions for PyCharm](https://docs.qgis.org/3.22/en/docs/pyqgis_developer_cookbook/plugins/ide_debugging.html)
 - Leave the .env file as desired (for other editors, reproducibility), but manually add the required paths to extrapaths, terminal settings, & the debugger.  Seems reasonable if not a lot of paths.  
-- PIP or conda install dotenv in the environment for VSCode, run the code below, handle the error when running from another environment where the imports aren't needed (like QGIS for example)  
+- PIP or Conda install dotenv in the environment for VSCode, run the code below, handle the error when running from another environment where the imports aren't needed (like QGIS for example)  
 ```python
 	try:
 		from dotenv import load_dotenv
@@ -38,7 +41,7 @@ Then add the paths to the settings with extrapaths, for linting and code complet
 ```JSON
 "python.analysis.extraPaths": ["extra_paths_here:another_path"],
 ```
-- Export the pythonpath of interest from the terminal for the session.  Or add this to the launch.json (Won't help for debugging that's all). Add it to extrapaths for linting and code completion.
+- Export the python path of interest from the terminal for the session.  Or add this to the launch.json (Won't help for debugging that's all). Add it to extrapaths for linting and code completion.
 ```BASH
 export PYTHONPATH="$PYTHONPATH:/usr/share/qgis/python/plugins:/usr/share/qgis/python"
 ```
