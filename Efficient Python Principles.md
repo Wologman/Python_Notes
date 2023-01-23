@@ -187,7 +187,7 @@ print(combinations(poke_types, 2))
 ```
 
 ### Common patterns with sets:
-Membership testing using `set` datatatype is much faster than the same thing in a tuple or a list:
+Membership testing using `set` datatype is much faster than the same thing in a tuple or a list:
 ```python
 in_list = 5 in {1, 2, 5 , 7, 12}
 print(in_list)
@@ -203,10 +203,15 @@ The other common methods for lists are `.union()`, `.symmetric_difference()`, `i
 
 
 ## Pandas
-For truly massive datasets Pandas might not be the thing, consider trying more perfomance focussed alternatives like Polars, Dask or Vaex, or working directly with numpy arrays.  But for everything else, Pandas is awesome.
+For truly massive datasets Pandas might not be the thing, consider trying more performance focussed alternatives like Polars, Dask or Vaex, or working directly with NumPy arrays.  But for everything else, Pandas is awesome.
 
-Pandas is built on top of numpy so wherever posible do operations with whole columns rather than iterating down them, so the operations can be vectorised.
+Pandas is built on top of NumPy so wherever possible do operations with whole columns rather than iterating down them, so the operations can be vectorised.
 
+If working with an individual column or row, it is good practice to assign it to a variable.
+```python
+my_column = df['my_col_header']  
+```
+`df.my_col_header` could also work since the columns are attributes of the DataFrame class, but not in all situations, for example the col header has a space in it.  So I'm going to stick with this syntax for consistency.
 
 ### Iterating by row
 Generally not the point of Pandas, but if it's really necessary then try to do it efficiently with `iterrows` or `itertuples`.

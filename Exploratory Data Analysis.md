@@ -1,4 +1,4 @@
-Summarising some useful snippets from the datacamp course '*how to win a Kaggle competition'*.  I could add to this some learnings from Ryan Holbrooks's feature engineering course, and datacamp's *Exploratory Data Analysis in Python*.
+Summarising some useful snippets from the datacamp course '*how to win a Kaggle competition'*.  I could add to this some learnings from Ryan Holbrooks's Feature Engineering course, and datacamp's *Exploratory Data Analysis in Python*.
 
 ## Useful Stats with `.describe()` & `.valuecounts()`
 
@@ -76,8 +76,38 @@ plt.ylabel('Number of pregnancies')
 plt.show()
 ```
 
+### Probability Mass Function
+Sometimes a histogram won't be granular enough as we have chosen arbitrary bins, which may hide smaller peaks, and we want to plot the value as a probability mass function.
+
+For a single value counts for example ages in a survey 'gss'
+```python
+age = gss['age']
+pmf = age.value_counts().sort_index() / len(age)
+pmf.bar(label='Age')
+plt.xlabel('Age')
+plt.ylabel('PMF')
+plt.show()
+```
+
+### Cumulative Distribution Function
+Better cover this too for completeness.  One answer for continuous, one for discrete.
+
+
+
+### Probability Density Function
+Write this up too. 
+
+
+### Comparing PMF, CDF & KDE 
+CDF produces a smoother distribution as it integrates out random variations that occur along the independent variable axis. It may be more effective at comparing two quite similar but noisy distributions.
+
+- In general, use CDFs for exploration to compare to look for differences in similar but noisy distributions
+- Use PMFs if there are only a few unique values
+- Use KDE if there are a lot of values, or a continuous independent variable
+
+
 ### Boolean series
-We may with so examine data that meets a specific condition, or set of conditions.  For this we can create a boolean series.  The data series together with a condition statement is all that is needed. 
+We may with so examine data that meets a specific condition, or set of conditions.  For this, we can create a boolean series.  The data series together with a condition statement is all that is needed. 
 
 ```python
 preterm = nsfg['prglngth'] < 37   #premature bables from a dataset of birth data
