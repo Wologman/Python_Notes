@@ -1,3 +1,4 @@
+[pandas cheat sheet](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf)
 
 For truly massive datasets Pandas might not be the thing, consider trying more performance focussed alternatives like Polars, Dask or Vaex, or working directly with NumPy arrays.  But for everything else, Pandas is awesome.
 
@@ -9,8 +10,34 @@ my_column = df['my_col_header']
 ```
 `df.my_col_header` could also work since the columns are attributes of the DataFrame class, but not in all situations, for example the col header has a space in it.  So I'm going to stick with this syntax for consistency.
 
+## Really Common operations 
+To subset based on a Boolean series.  Remove all rows based on some field equaling some value:
+`df = df[df['column_name'] == some_value]`
+
 ## Efficient memory and speed considerations
-Make some notes here about loading with the most efficient datatype.
+### Choice of datatypes
+It's good practice to specify the datatype when loading, and avoid using mixed datatypes in a particular field.
+
+### For big dataframes, it's time to stop using csv for storing everything!
+CSV stores all data as text.  It's slow to load and unload, and wastes memory in most cases as there is no efficiency gain from choosing optimal Pandas datatypes.  
+
+**Pickle**
+Pickle is Python specific, for storage of any python object, including dataframes. 
+```python
+import pickle
+with open('path/to/df.pkl', 'wb') as f:
+    pickle.dump(df, f)
+```
+and to re-load later
+```python
+with open('path/to/df.pkl', 'rb') as f:
+    df = pickle.load(f)
+```
+
+**Parquet**
+Pandas has native support for parquet, so long as the pyarrow library is also installed (`conda install pyarrow`) , so it's super easy.
+To save:   `df.to_parquet('file_name.parquet')`
+To load:   `df = pd.read_parquet('file_name.parquet')`
 
 ## Iterating by row
 Generally not the point of Pandas, but if it's really necessary then try to do it efficiently with `iterrows` or `itertuples`.
@@ -24,10 +51,10 @@ for i,row in baseball_df.iterrows():
 ```
 
 #### `df.intertuples()`
-Faster than `df.interrows()` and it returns a special pandas datatype in the form of a named tuple.  The values can no be accessed as atrubute values with .attrubute syntax.
+Faster than `df.interrows()` and it returns a special pandas datatype in the form of a named tuple.  The values can no be accessed as attribute values with attribute syntax.
 
 ```python
-for row_tupple in baseball_df.iterrows():
+for row_tupple in baseball_df.itertuples():
 	wins = row_tuple.W
 	games_played = row_tuple.G
 ```

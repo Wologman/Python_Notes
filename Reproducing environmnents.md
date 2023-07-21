@@ -16,7 +16,7 @@ Can be used to create a `conda` compatible virtual environment with
 If you want a file which you can use to create a `pip` virtual environment (i.e. a `requirements.txt` in the right format) you can install `pip` within the `conda` environment, then use pip to create `requirements.txt`.
 
 
-### To use in future with Venv and  PIP3
+### To use in future with Venv and PIP3
 
 ```python
 conda activate <env>

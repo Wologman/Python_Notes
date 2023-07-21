@@ -91,6 +91,16 @@ print(sqrd_nums)
 >>> array([4,,1,0,1,4])
 ```
 
+### Masking
+
+To efficiently apply operations based on conditions use a mask.  Here is an example from BirdCLEF, setting everything to zero if the no-call was > 0.2 and > the other predictions:
+
+```python
+arr_view = np.concatenate((arr[:,:nocall_idx], arr[:,nocall_idx+1:]), axis=1)
+row_max = np.amax(arr_view, axis=1)   # An array with shape (120,1)
+mask = (row_max < arr[:,nocall_idx]) & (arr[:,nocall_idx] > 0.2)
+arr[mask] = 0  #This is the line setting all to zero, if they aren't masked
+```
 
 ## Performance Benchmarking
 

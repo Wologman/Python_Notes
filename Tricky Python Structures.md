@@ -543,7 +543,7 @@ print('N' if lat < 0 else 'S')
 ```
 
 ## Boolean values in a one-line conditional statement
-This is very nice when possible, use the equivalense of true=1, and false=0.  For example:
+This is very nice when possible, use the equivalence of true=1, and false=0.  For example:
 ```Python
 def print_coords(lat, long):
     ns = 'NS'[lat < 0]  #True (1) defaults to "N" and False(0) defaults to "S"
