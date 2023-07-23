@@ -1,1 +1,0 @@
-Lots of good notes to come here.  PyCharm is awesome.
