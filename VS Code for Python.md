@@ -1,9 +1,8 @@
-I'm only persevering with this because sometimes it's handy to setup VScode on somebody else's system if they don't have a subscription to PyCharm.  VScode is lightweight and free.  Otherwise, just use PyCharm, I don't think VScode is worth the hassle at the moment for anything serious, Especially on Windows, where it seems to run into Conda issues as well..  
+VScode is lightweight, free, is somewhat language agnostic, and very customisable.  But it can be quite painful sometimes, especially when it comes to managing Conda and Python Environments. 
 
-But it's a simple light weight way to show a client a Jupyter notebook.  That's something the free version of PyCharm doesn't do, and it's a bit less overhead than installing the full Anaconda.
+I tried PyCharm, but gave up on it after loosing bits of work due to confusion over how it manages version control.  
 
 #### Key ideas in this page: 
-- .VSCode is probably not worth the effort if you need to use environment variables, or project specific python paths from out side the root folder.
 - .code-workspace -- A .json file that defines settings and folders for a multi-root folder workspace
 - .vscode -- As above, but single folder.  
 - settings.json -- A user-wide one for all settings (eg dark-mode)
@@ -12,6 +11,13 @@ But it's a simple light weight way to show a client a Jupyter notebook.  That's 
 - The interpreter path -- where VSCode looks for the python interpreter
 - .env files -- Need to be located by the settings.json file for the project, or the python plugin will automatically look in the worspace folder.  Currently, not working as documented.
 - Workspace folder -- where the .vscode file is located.  Or multiple folders listed in .code-workspace.
+
+## Working with Conda
+
+I'm still not getting this right, especially on windows.
+[Follow this up](https://medium.com/analytics-vidhya/efficient-way-to-activate-conda-in-vscode-ef21c4c231f2)
+
+
 
 ### Bugs in VSCode
 VScode is currently not picking up environment variables from .env files the way it claims in the documentation.  It is not enough just to leave the .env file in the workspace folder.  Either single .vscode workspaces or with the .code-workspace
