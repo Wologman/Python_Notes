@@ -1,58 +1,76 @@
-VScode is lightweight, free, is somewhat language agnostic, and very customisable.  But it can be quite painful sometimes, especially when it comes to managing Conda and Python Environments. 
-
-I tried PyCharm, but gave up on it after loosing bits of work due to confusion over how it manages version control.  
-
+VSCode is lightweight, free, is somewhat language agnostic, and very customisable.  But it can be quite painful sometimes, especially when it comes to managing Conda and Python Environments. 
 #### Key ideas in this page: 
-- .code-workspace -- A .json file that defines settings and folders for a multi-root folder workspace
-- .vscode -- As above, but single folder.  
-- settings.json -- A user-wide one for all settings (eg dark-mode)
-- settings.json -- Settings, prioritised for the workspace (Settings stored in the .vscode or .code-workspace  file )
+- `.code-workspace` -- A `.json` file that defines settings and folders for a multi-root folder workspace
+- `.vscode` -- As above, but single folder.  
+- `settings.json` -- A user-wide one for all settings (eg dark-mode)
+- The other `settings.json` -- Settings, prioritised for the workspace (Settings stored in the .vscode or .code-workspace  file )
+- `launch.json` -- Another way to control what happens when the terminal is launched, for example export to a PYTHONPATH variable
 - PYTHONPATH -- [[Environment Variables]], that tell Python where to look for libraries
+- `extrapaths`  -- a setting for `settings.json` specifically intended for extra PYTHONPATHs
 - The interpreter path -- where VSCode looks for the python interpreter
-- .env files -- Need to be located by the settings.json file for the project, or the python plugin will automatically look in the worspace folder.  Currently, not working as documented.
-- Workspace folder -- where the .vscode file is located.  Or multiple folders listed in .code-workspace.
+- Setup Conda in the terminal window
+- `.env` files -- Need to be located by the settings.json file for the project, or the python plugin will automatically look in the workspace folder.  Currently, not sure if this is working as documented.
+- Workspace folder -- where the `.vscode` file is located.  Or multiple folders listed in .code-workspace.
+
+## Useful Shortcuts
+
+| Shortcut | Description  |
+| ----------- | ----------- | 
+|  Ctrl + Shift + P  | Command Pallet|
+| Ctrl + \` | New terminal window | 
+| Ctrl + Shift + D  |  Debugger  |
+| Shift + Enter  |  Runs highlighted code in terminal |
+| Right click + Run in Ipython Window | Brings up Ipython window and variable explorer |
+| Shift + Tab |  Moves highlighted block back one tab  |
+
+## VSCode with Python & Conda on Windows
+To make Conda commands through the shell built into VSCode on Windows you need to launch the editor through the anaconda terminal, or permanently initialize the PowerShell terminal to use Conda [[VS Code for Python#Working with Conda]].
+
+## Different Windows and Modes
+### The Terminal Window
+The default shell in windows will be PowerShell, but this could be changed to cmd by changing the workspace, or user settings.  In Linux it would be BASH.  It is probably worth persevering with PowerShell even though it's less familiar, as it is a lot more powerful.
+
+### Debugging
+
+### IPython Window
+
+### Previewing Markdown & Double panels
 
 ## Working with Conda
 
-I'm still not getting this right, especially on windows.
-[Follow this up](https://medium.com/analytics-vidhya/efficient-way-to-activate-conda-in-vscode-ef21c4c231f2)
+Useful references: [Kathryn-medium.com](https://medium.com/analytics-vidhya/efficient-way-to-activate-conda-in-vscode-ef21c4c231f2)  [Chris-Mamon](https://www.linkedin.com/pulse/introduction-vscode-python-conda-chris-mamon/)
+
+If using the default PowerShell in the terminal window, then the PowerShell settings will need to be changed to intialize Conda.  Below are the steps to allow PowerShell to recognize Conda, whilst not having PowerShell defaulting to Conda (base) on opening:
+
+- Right-click on start menu to open PowerShell as administrator
+- `conda init powershell`
+- `set-executionpolicy unrestricted` 
+- `conda config --set auto_activate_base false` 
+
+Now Conda commands can be made directly from the terminal window in VSCode, (Windows)  Or for that matter anything that uses the PowerShell.
 
 
+## Working with Environment variables
 
-### Bugs in VSCode
-VScode is currently not picking up environment variables from .env files the way it claims in the documentation.  It is not enough just to leave the .env file in the workspace folder.  Either single .vscode workspaces or with the .code-workspace
+Consider
+- The project should really be IDE agnostic
+- The paths to all libraries needs to be transparent
+- Some variables should be kept private from version control, GIT, Kaggle etc (e.g. API keys)
+- VScode needs PYTHONPATH variables for editing functionality like linting and code-completion
 
-This is an almighty pain in the arse, and I've spent weeks trying to understand what was going on.  It explains why QGIS won't run properly from VSCODE.  It's amazing VSCode has such a massive flaw.  People have been struggling with this off and on since 2015.
+With the above in mind, it seems to me that best practice is to do all the following:
+- Always store environment variables in a .env file, load within script using `load_dotenv()`, to meet the requirement for the project to be IDE agnostic, and work from a simple shell terminal if need be.
+- Set the path to the above file in the system wide `.json` file, so that the terminal always looks for the .env file  `"python.pythonPath": "${workspaceFolder}/.env/bin/python"`
+- The debugger should default to the same settings unless told otherwise by it's `launch.json` file.
 
-[Here is the issue tracking on GitHub](https://github.com/microsoft/vscode-python/issues/944)
-[And here](https://github.com/microsoft/pylance-release/issues/275)
-
-This is a shambles.  Different issues and paths used for Pylance + Code completion, Terminal, Debugger.  Microsoft clearly doesn't take Python all that seriously for VSCode.  
-
-##### Workaround ideas
-
-I haven't finished thinking this through.  How many places could I specify a python path?  Launch? Terminal settings, settings, export from the terminal, from the python code, from extrapaths in settings.   
-
-- Switch to PyCharm, or Spyder [Here are the isntructions for PyCharm](https://docs.qgis.org/3.22/en/docs/pyqgis_developer_cookbook/plugins/ide_debugging.html)
-- Leave the .env file as desired (for other editors, reproducibility), but manually add the required paths to extrapaths, terminal settings, & the debugger.  Seems reasonable if not a lot of paths.  
-- PIP or Conda install dotenv in the environment for VSCode, run the code below, handle the error when running from another environment where the imports aren't needed (like QGIS for example)  
+Full code for loading with `dotenv`
 ```python
-	try:
-		from dotenv import load_dotenv
-		load_dotenv()
-	except ImportError:
-		pass
+from dotenv import load_dotenv
+	load_dotenv()
 ```
-Then add the paths to the settings with extrapaths, for linting and code completion.	
-```JSON
-"python.analysis.extraPaths": ["extra_paths_here:another_path"],
-```
-- Export the python path of interest from the terminal for the session.  Or add this to the launch.json (Won't help for debugging that's all). Add it to extrapaths for linting and code completion.
-```BASH
-export PYTHONPATH="$PYTHONPATH:/usr/share/qgis/python/plugins:/usr/share/qgis/python"
-```
-### Settings###
-There are two types of settings.  User wide settings, and Workspace settings.  Both stored in a settings.json file, with the workplace settings overriding most of the user settings.
+
+### Settings Files
+There are two types of settings.  User wide settings, and Workspace settings.  Both stored in a `settings.json` file, with the workplace settings overriding most of the user settings.
 
 #### Workspace Folder
 This is important if I'm using a .env file.  Either I've opened a folder, and worked on something in it.  Then that is the workspace folder, and there will be a `.vscode` file sitting in this folder referencing a `settings.json` file.  **Or**  I've setup and saved a code workspace.  In practice this is a `<name>.code-workspace` JSON file, which will list the workspace folders like this:

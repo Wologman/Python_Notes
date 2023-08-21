@@ -1,5 +1,4 @@
 Some of this is based on [Writing Efficient Python Code](https://app.datacamp.com/learn/courses/writing-efficient-python-code) from datacamp
-
 ## The Zen of Python (By Tim Peters)
 
 To print this in a Python terminal just type 
@@ -15,7 +14,7 @@ import this
 - Sparse is better than dense
 - Readability counts
 - Special cases aren't special enough to break the rules
-- Althouch practicality beats purity
+- Although practicality beats purity
 - Errors should never pass silently
 - Unless explicitly silenced
 - In the face of ambiguity, refuse the temptation to guess
@@ -26,9 +25,9 @@ import this
 - If the implementation is easy to explain, it may be a good idea. 
 - Namespaces are one honking great idea -- let's do more of those!
 
-*Flat is better than nested* is something I can pobably work on.  Use comprehensions, unpack iterators when I need, broadcast numpy arrays, use numpy over lists.
+*Flat is better than nested* is something I can probably work on.  Use comprehensions, unpack iterators when I need, broadcast NumPy arrays, use NumPy over lists.
 
-## Python Builtins
+## Python Built-ins
 
 Using these is a good idea when possible as they are highly optimised
 
@@ -45,7 +44,7 @@ print(list(rnd_nums))
 
 >>> [1, 2, 3, 4, 5]
 ```
-Note that we hav passed a reference to the function, not an instance of the function.  Map can also be applied to a lamda function.  So now we have a way to apply a function to a list of elements without writing a for loop.
+Note that we have passed a reference to the function, not an instance of the function.  Map can also be applied to a lamda function.  So now we have a way to apply a function to a list of elements without writing a for loop.
 ```python
 nums = [1, 2, 3, 4, 5]
 sqrd_numbs = map(lamda x: x**2, nums)
@@ -92,7 +91,6 @@ print(sqrd_nums)
 ```
 
 ### Masking
-
 To efficiently apply operations based on conditions use a mask.  Here is an example from BirdCLEF, setting everything to zero if the no-call was > 0.2 and > the other predictions:
 
 ```python
@@ -103,7 +101,6 @@ arr[mask] = 0  #This is the line setting all to zero, if they aren't masked
 ```
 
 ## Performance Benchmarking
-
 For quick comparisons of time and memory the iPython shell has some built-in tools of its own.
 
 ### %timeit
