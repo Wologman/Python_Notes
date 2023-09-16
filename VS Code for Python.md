@@ -1,4 +1,6 @@
-VSCode is lightweight, free, is somewhat language agnostic, and very customisable.  But it can be quite painful sometimes, especially when it comes to managing Conda and Python Environments. 
+VSCode is lightweight, cross-platform, free, somewhat language agnostic, and very customisable.  It's technically not a full IDE, but there are so many publicly available widgets it can be turned into one.  But it can be quite painful sometimes, especially when it comes to managing Conda and Python Environments. 
+
+They are currently trialling the automatic recognition of environment variables, which is already the case in PyCharm, so the information below might change soonish.  
 #### Key ideas in this page: 
 - `.code-workspace` -- A `.json` file that defines settings and folders for a multi-root folder workspace
 - `.vscode` -- As above, but single folder.  
@@ -9,7 +11,7 @@ VSCode is lightweight, free, is somewhat language agnostic, and very customisabl
 - `extrapaths`  -- a setting for `settings.json` specifically intended for extra PYTHONPATHs
 - The interpreter path -- where VSCode looks for the python interpreter
 - Setup Conda in the terminal window
-- `.env` files -- Need to be located by the settings.json file for the project, or the python plugin will automatically look in the workspace folder.  Currently, not sure if this is working as documented.
+- `.env` files -- Need to be located by the `settings.json` file for the project, or the python plugin will automatically look in the workspace folder.  Currently, not sure if this is working as documented.
 - Workspace folder -- where the `.vscode` file is located.  Or multiple folders listed in .code-workspace.
 
 ## Useful Shortcuts
@@ -36,11 +38,11 @@ The default shell in windows will be PowerShell, but this could be changed to cm
 
 ### Previewing Markdown & Double panels
 
-## Working with Conda
+## Working with Conda in Windows
 
-Useful references: [Kathryn-medium.com](https://medium.com/analytics-vidhya/efficient-way-to-activate-conda-in-vscode-ef21c4c231f2)  [Chris-Mamon](https://www.linkedin.com/pulse/introduction-vscode-python-conda-chris-mamon/)
+Like everything else, VSCode is a pain on Windows, but anyway, sometimes we need to dance with the devil.  Useful references: [Kathryn-medium.com](https://medium.com/analytics-vidhya/efficient-way-to-activate-conda-in-vscode-ef21c4c231f2)  [Chris-Mamon](https://www.linkedin.com/pulse/introduction-vscode-python-conda-chris-mamon/)
 
-If using the default PowerShell in the terminal window, then the PowerShell settings will need to be changed to intialize Conda.  Below are the steps to allow PowerShell to recognize Conda, whilst not having PowerShell defaulting to Conda (base) on opening:
+If using the default PowerShell in the terminal window, then the PowerShell settings will need to be changed to initialise Conda.  Below are the steps to allow PowerShell to recognize Conda, whilst not having PowerShell defaulting to Conda (base) on opening:
 
 - Right-click on start menu to open PowerShell as administrator
 - `conda init powershell`
@@ -48,7 +50,6 @@ If using the default PowerShell in the terminal window, then the PowerShell sett
 - `conda config --set auto_activate_base false` 
 
 Now Conda commands can be made directly from the terminal window in VSCode, (Windows)  Or for that matter anything that uses the PowerShell.
-
 
 ## Working with Environment variables
 
