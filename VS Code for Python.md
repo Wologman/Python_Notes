@@ -40,14 +40,18 @@ The default shell in windows will be PowerShell, but this could be changed to cm
 
 ## Working with Conda in Windows
 
-Like everything else, VSCode is a pain on Windows, but anyway, sometimes we need to dance with the devil.  Useful references: [Kathryn-medium.com](https://medium.com/analytics-vidhya/efficient-way-to-activate-conda-in-vscode-ef21c4c231f2)  [Chris-Mamon](https://www.linkedin.com/pulse/introduction-vscode-python-conda-chris-mamon/)
+VSCode is a pain on Windows, but anyway, sometimes we need to dance with the devil.  Useful references: [Kathryn-medium.com](https://medium.com/analytics-vidhya/efficient-way-to-activate-conda-in-vscode-ef21c4c231f2)  [Chris-Mamon](https://www.linkedin.com/pulse/introduction-vscode-python-conda-chris-mamon/)
 
 If using the default PowerShell in the terminal window, then the PowerShell settings will need to be changed to initialise Conda.  Below are the steps to allow PowerShell to recognize Conda, whilst not having PowerShell defaulting to Conda (base) on opening:
 
+- Ensure Conda is added to the system's PATH variable so shell terminals can recognise Conda commands by default.  Ideally just tick the box that says to add it when installing Conda, but if it's too late for that then for Windows it's: Settings > System > About > Advanced
+  eg, *C:\\Users\\ollyp\\miniconda3*,  *C:\Users\\ollyp\\miniconda3\\Scripts*   
 - Right-click on start menu to open PowerShell as administrator
-- `conda init powershell`
-- `set-executionpolicy unrestricted` 
-- `conda config --set auto_activate_base false` 
+```bash
+conda init powershell
+set-executionpolicy unrestricted
+conda config --set auto_activate_base false
+```
 
 Now Conda commands can be made directly from the terminal window in VSCode, (Windows)  Or for that matter anything that uses the PowerShell.
 
@@ -69,10 +73,8 @@ Full code for loading with `dotenv`
 from dotenv import load_dotenv
 	load_dotenv()
 ```
-
 ### Settings Files
 There are two types of settings.  User wide settings, and Workspace settings.  Both stored in a `settings.json` file, with the workplace settings overriding most of the user settings.
-
 #### Workspace Folder
 This is important if I'm using a .env file.  Either I've opened a folder, and worked on something in it.  Then that is the workspace folder, and there will be a `.vscode` file sitting in this folder referencing a `settings.json` file.  **Or**  I've setup and saved a code workspace.  In practice this is a `<name>.code-workspace` JSON file, which will list the workspace folders like this:
 
@@ -188,10 +190,10 @@ This does not seem to work for me
 ```
 
 #### PYTHONPATH for Debugging
-This needs to go in the launch.json  file.
+This needs to go in the `launch.json`  file.
 
 #### Set Interpreter path for terminal commands
-So the terminal command window does not know the interpreter path unless it is set in the terminal settings, simply running the script where the editor knows the path but not the terminal may use the wrong interpereter. But specifying it in the command solves this issue.  For example in Ubuntu:
+So the terminal command window does not know the interpreter path unless it is set in the terminal settings, simply running the script where the editor knows the path but not the terminal may use the wrong interpreter. But specifying it in the command solves this issue.  For example in Ubuntu:
 
 ```bash
 /usr/bin/python3 "/media/olly/One Touch/Documents/GIS/QGIS/Basic_QGIS_Operation.py"
